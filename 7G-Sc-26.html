@@ -155,11 +155,23 @@ html.dark .cloud{opacity:0.18;}
 .note-block li{margin-bottom:8px; line-height:1.55;}
 .callout{border-radius:var(--radius-md); padding:12px 14px; margin:12px 0; font-size:14.5px; line-height:1.5;}
 .callout-key{background:var(--highlight-key); color:#4a3d05;}
+.callout-key strong{color:#8a6100;}
 html.dark .callout-key{color:#f0e6b8;}
+html.dark .callout-key strong{color:#ffdd7a;}
 .callout-watch{background:var(--highlight-watch); color:#5c3016;}
+.callout-watch strong{color:#a13a12;}
 html.dark .callout-watch{color:#f2d3bd;}
+html.dark .callout-watch strong{color:#ff9a68;}
 .callout-analogy{background:var(--card-2); border-left:4px solid var(--earth); font-style:italic; color:var(--ink-soft);}
-.vocab-chip{display:inline-block; background:var(--card-2); border:1px solid var(--border); border-radius:999px; padding:5px 12px; margin:3px 4px 3px 0; font-size:13px; font-weight:700;}
+.callout-analogy strong{color:var(--earth); font-style:normal;}
+.vocab-chip{
+  display:inline-flex; align-items:center; gap:4px; background:var(--card-2); border:1.5px solid var(--earth);
+  color:var(--earth); border-radius:999px; padding:7px 14px; margin:3px 6px 3px 0; font-size:13px; font-weight:700;
+  min-height:36px; font-family:var(--font-body); cursor:pointer; transition:transform 0.12s ease, background 0.12s ease;
+}
+.vocab-chip::after{content:"🔊"; font-size:11px; opacity:0.7;}
+.vocab-chip:hover{background:var(--earth-soft); transform:translateY(-1px);}
+.vocab-chip:active{transform:scale(0.97);}
 
 /* ---------- Ayah embed ---------- */
 .ayah-card{border-radius:var(--radius-md); border:1px solid var(--gold); background:var(--gold-soft); padding:14px; margin:14px 0;}
@@ -275,14 +287,14 @@ var UNITS = [
     blurb: "Every living thing is built from cells — the smallest unit that can be considered alive.",
     notes: {
       key: [
-        "Cell theory: all living things are made of cells, the cell is the basic unit of structure and function, and all cells come from existing cells.",
+        "**Cell theory**: all living things are made of cells, the cell is the basic unit of structure and function, and all cells come from existing cells.",
         "A microscope revealed cells because they're too small to see with the eye alone — most are 10–100 micrometers across.",
-        "Animal cells and plant cells share a nucleus, cytoplasm, mitochondria, and cell membrane — but plant cells alone have a rigid cell wall and chloroplasts.",
-        "Each organelle has one main job: the nucleus stores DNA and directs the cell, mitochondria release usable energy, ribosomes build proteins, and the cell membrane controls what enters and leaves.",
+        "Animal cells and plant cells share a **nucleus**, cytoplasm, **mitochondria**, and cell membrane — but plant cells alone have a rigid cell wall and chloroplasts.",
+        "Each **organelle** has one main job: the **nucleus** stores DNA and directs the cell, **mitochondria** release usable energy, ribosomes build proteins, and the cell membrane controls what enters and leaves.",
       ],
       watch: [
-        "Don't mix up 'cell wall' (plant only, rigid, for support) with 'cell membrane' (every cell has one, flexible, controls traffic).",
-        "Prokaryotes (bacteria) have no nucleus — their DNA floats free in the cytoplasm. Eukaryotes (everything else, including you) keep DNA inside a nucleus.",
+        "Don't mix up 'cell wall' *(plant only, rigid, for support)* with 'cell membrane' *(every cell has one, flexible, controls traffic)*.",
+        "Prokaryotes *(bacteria)* have no **nucleus** — their DNA floats free in the cytoplasm. Eukaryotes *(everything else, including you)* keep DNA inside a nucleus.",
       ],
       analogy: "Think of a cell like a tiny factory: the nucleus is the main office giving instructions, mitochondria are the power plant, ribosomes are the assembly line, and the membrane is airport security deciding what gets in or out.",
       vocab: ["cell theory", "organelle", "nucleus", "mitochondria", "prokaryote", "eukaryote"],
@@ -358,18 +370,18 @@ var UNITS = [
     title: "Photosynthesis, Respiration & Energy Flow",
     standards: ["MS-LS1-6", "MS-LS1-7"],
     priority: true,
-    hardNote: "MS-LS1-7 was one of the hardest standards on the real 2025 NY state test (only 7% of students got the constructed-response fully correct) — worth extra reps.",
+    hardNote: "MS-LS1-7 was one of the hardest standards on the real 2025 NY state test (only **7%** of students got the constructed-response fully correct) — worth extra reps.",
     blurb: "How matter and energy move from sunlight into food, and from food into the energy your body actually uses.",
     notes: {
       key: [
-        "Photosynthesis: plants use light energy to turn carbon dioxide and water into glucose (sugar) and oxygen. Word equation: carbon dioxide + water + light energy → glucose + oxygen.",
-        "Cellular respiration: cells (plant AND animal) break down glucose using oxygen to release usable energy, producing carbon dioxide and water as byproducts — essentially the reverse of photosynthesis.",
-        "Matter cycles (atoms are reused) but energy flows one direction — it enters ecosystems as light and eventually leaves as heat.",
+        "**Photosynthesis**: plants use light energy to turn carbon dioxide and water into **glucose** *(sugar)* and oxygen. Word equation: carbon dioxide + water + light energy → glucose + oxygen.",
+        "**Cellular respiration**: cells *(plant AND animal)* break down **glucose** using oxygen to release usable energy, producing carbon dioxide and water as byproducts — essentially the reverse of **photosynthesis**.",
+        "Matter cycles *(atoms are reused)* but energy flows one direction — it enters ecosystems as light and eventually leaves as heat.",
         "Food is chemically rearranged during digestion and respiration, not destroyed — the atoms in a sandwich end up as part of your cells, exhaled CO2, and water.",
       ],
       watch: [
-        "Photosynthesis and respiration are near-mirror opposites — don't mix up which one uses oxygen (respiration) vs. releases oxygen (photosynthesis).",
-        "Plants perform respiration too, all the time — photosynthesis is the extra process they add during daylight.",
+        "**Photosynthesis** and respiration are near-mirror opposites — don't mix up which one uses oxygen *(respiration)* vs. releases oxygen *(photosynthesis)*.",
+        "Plants perform respiration too, all the time — **photosynthesis** is the extra process they add during daylight.",
       ],
       analogy: "Photosynthesis is like a chef using energy from a stove (light) to cook plain ingredients (CO2 + water) into a meal (glucose). Respiration is like eating that meal to power your own body — breaking it back down for energy.",
       vocab: ["photosynthesis", "cellular respiration", "glucose", "chlorophyll", "matter cycling", "energy flow"],
@@ -441,13 +453,13 @@ var UNITS = [
     notes: {
       key: [
         "The body is organized in levels: cells → tissues → organs → organ systems → organism. Each level is built from the one below it.",
-        "Homeostasis is the body keeping internal conditions (like temperature) stable even when the outside environment changes.",
-        "Information processing pathway: stimulus → sensory receptor → nerve signal to the brain → brain processes it → signal sent back out → muscle/gland responds.",
+        "**Homeostasis** is the body keeping internal conditions *(like temperature)* stable even when the outside environment changes.",
+        "Information processing pathway: **stimulus** → **sensory receptor** → nerve signal to the brain → brain processes it → signal sent back out → muscle/gland responds.",
         "Body systems interact constantly: the circulatory system delivers oxygen the respiratory system collected, which the muscular system uses, all coordinated by the nervous system.",
       ],
       watch: [
-        "A 'stimulus' is the trigger (a loud noise); the 'response' is the reaction (turning your head). Don't swap the order when describing the pathway.",
-        "Sweating and shivering are opposite homeostasis responses — sweating cools you down, shivering (muscle contraction) warms you up.",
+        "A '**stimulus**' is the trigger *(a loud noise)*; the '**response**' is the reaction *(turning your head)*. Don't swap the order when describing the pathway.",
+        "Sweating and shivering are opposite **homeostasis** responses — sweating cools you down, shivering *(muscle contraction)* warms you up.",
       ],
       analogy: "Your body systems are like departments in a company that must constantly email each other — the nervous system is the messaging app that keeps everyone coordinated.",
       vocab: ["homeostasis", "stimulus", "response", "organ system", "sensory receptor"],
@@ -518,14 +530,14 @@ var UNITS = [
     blurb: "How traits pass from parents to offspring, and what happens when the genetic code changes.",
     notes: {
       key: [
-        "Genes are sections of DNA that carry instructions for traits. Each parent contributes one allele (version of a gene) per trait.",
-        "A dominant allele (capital letter, e.g. H) shows up in the offspring's appearance even if only one copy is present. A recessive allele (lowercase, h) only shows up if both copies are recessive (hh).",
-        "A Punnett square predicts the possible allele combinations of offspring by crossing each parent's alleles.",
-        "A mutation is any change in a gene's DNA sequence. Mutations can be harmful, helpful, or have no effect (neutral) — it depends on how they change the resulting protein.",
+        "Genes are sections of DNA that carry instructions for traits. Each parent contributes one **allele** (version of a **gene**) per trait.",
+        "A **dominant** **allele** *(capital letter, e.g. H)* shows up in the offspring's appearance even if only one copy is present. A **recessive** allele *(lowercase, h)* only shows up if both copies are recessive *(hh)*.",
+        "A **Punnett square** predicts the possible **allele** combinations of offspring by crossing each parent's alleles.",
+        "A **mutation** is any change in a **gene**'s DNA sequence. Mutations can be harmful, helpful, or have no effect *(neutral)* — it depends on how they change the resulting protein.",
       ],
       watch: [
-        "'Carrier' means having one recessive allele but not showing the trait (Hh) — don't confuse a carrier with someone who has the condition (hh).",
-        "A dominant trait isn't automatically 'better' or 'more common' — dominant just means it masks the recessive allele when paired with it.",
+        "'**Carrier**' means having one **recessive** **allele** but not showing the trait *(Hh)* — don't confuse a carrier with someone who has the condition *(hh)*.",
+        "A **dominant** trait isn't automatically 'better' or 'more common' — dominant just means it masks the **recessive** **allele** when paired with it.",
       ],
       analogy: "Think of a Punnett square like a tic-tac-toe grid for coin flips — you're finding every possible combination of 'heads or tails' each parent could hand down, then reading off the results.",
       vocab: ["gene", "allele", "dominant", "recessive", "Punnett square", "mutation", "carrier"],
@@ -593,10 +605,10 @@ var UNITS = [
     blurb: "Sexual vs. asexual reproduction, and the factors that influence how organisms grow.",
     notes: {
       key: [
-        "Asexual reproduction produces offspring genetically identical to a single parent (e.g., some plants, bacteria). Sexual reproduction combines genetic material from two parents, producing genetically varied offspring.",
-        "Sexual reproduction's genetic variation is an advantage for a population facing a changing environment or disease.",
-        "Growth in organisms is affected by both genetics (inherited potential) and environment (nutrition, light, temperature).",
-        "Animal and plant reproductive behaviors and structures (colorful displays, flowers, seed dispersal) increase the chances of successful reproduction.",
+        "**Asexual reproduction** produces offspring genetically identical to a single parent *(e.g., some plants, bacteria)*. **Sexual reproduction** combines genetic material from two parents, producing genetically varied offspring.",
+        "**Sexual reproduction**'s **genetic variation** is an advantage for a population facing a changing environment or disease.",
+        "Growth in organisms is affected by both genetics *(inherited potential)* and environment *(nutrition, light, temperature)*.",
+        "Animal and plant reproductive behaviors and structures *(colorful displays, flowers, seed dispersal)* increase the chances of successful reproduction.",
       ],
       watch: [
         "Asexual does not mean 'no reproduction' — it means reproduction from a single parent, still very much a way to make offspring.",
@@ -649,14 +661,14 @@ var UNITS = [
     title: "Ecosystems & Interdependence",
     standards: ["MS-LS2-1", "MS-LS2-2", "MS-LS2-3", "MS-LS2-4"],
     priority: true,
-    hardNote: "MS-LS2-4 was one of the harder standards nationally (9% fully correct on the real 2025 NY test) — extra reps included.",
+    hardNote: "MS-LS2-4 was one of the harder standards nationally (**9%** fully correct on the real 2025 NY test) — extra reps included.",
     blurb: "How organisms depend on each other and on limited resources within an ecosystem.",
     notes: {
       key: [
-        "A food web shows feeding relationships between many organisms; energy flows from producers (plants, algae) to consumers, and eventually to decomposers.",
-        "Competition happens when two organisms need the same limited resource (food, space, water). Symbiosis describes close, long-term relationships between two species — including mutualism (both benefit), commensalism (one benefits, other unaffected), and parasitism (one benefits, other harmed).",
-        "Carrying capacity is the maximum population size an environment can sustainably support, based on its available resources.",
-        "A disruption to one part of a food web (removing a species, a resource shortage) can cascade and affect populations that seem unrelated at first glance.",
+        "A **food web** shows feeding relationships between many organisms; energy flows from producers *(plants, algae)* to consumers, and eventually to decomposers.",
+        "**Competition** happens when two organisms need the same limited resource *(food, space, water)*. **Symbiosis** describes close, long-term relationships between two species — including mutualism *(both benefit)*, commensalism *(one benefits, other unaffected)*, and parasitism *(one benefits, other harmed)*.",
+        "**Carrying capacity** is the maximum population size an environment can sustainably support, based on its available resources.",
+        "A disruption to one part of a **food web** *(removing a species, a resource shortage)* can cascade and affect populations that seem unrelated at first glance.",
       ],
       watch: [
         "Don't assume two organisms that share a food source are automatically enemies — 'competitive relationship' has a specific meaning: both need the exact same limited resource.",
@@ -739,14 +751,14 @@ var UNITS = [
     blurb: "Why a variety of species matters, and how human decisions affect that variety.",
     notes: {
       key: [
-        "Biodiversity is the variety of species in an ecosystem. Higher biodiversity generally makes an ecosystem more resilient to disturbances.",
-        "Ecosystem services are benefits humans get from healthy ecosystems for free — clean water filtration, pollination, flood control, and more.",
-        "Human activities (habitat destruction, pollution, overfishing, introducing invasive species) are major drivers of biodiversity loss.",
-        "Conservation solutions (protected areas, regulated fishing, habitat restoration) aim to maintain ecosystem services by protecting biodiversity.",
+        "**Biodiversity** is the variety of species in an ecosystem. Higher biodiversity generally makes an ecosystem more resilient to disturbances.",
+        "**Ecosystem services** are benefits humans get from healthy ecosystems for free — clean water filtration, pollination, flood control, and more.",
+        "Human activities (habitat destruction, pollution, overfishing, introducing **invasive species**) are major drivers of **biodiversity** loss.",
+        "**Conservation** solutions *(protected areas, regulated fishing, habitat restoration)* aim to maintain **ecosystem services** by protecting **biodiversity**.",
       ],
       watch: [
-        "'Ecosystem services' is a specific vocabulary term — it means benefits to humans, not just 'things in nature.'",
-        "An invasive species isn't automatically 'bad' by nature — it's the disruption to an existing balance that causes harm.",
+        "'**Ecosystem services**' is a specific vocabulary term — it means benefits to humans, not just 'things in nature.'",
+        "An **invasive species** isn't automatically 'bad' by nature — it's the disruption to an existing balance that causes harm.",
       ],
       analogy: "Biodiversity is like a toolbox — one with many different tools (species) can handle many different problems (disturbances). A toolbox with only a hammer breaks down the moment the job needs a screwdriver.",
       vocab: ["biodiversity", "ecosystem services", "conservation", "invasive species"],
@@ -795,18 +807,18 @@ var UNITS = [
     title: "Evolution & Natural Selection",
     standards: ["MS-LS4-1", "MS-LS4-2", "MS-LS4-3", "MS-LS4-4", "MS-LS4-5", "MS-LS4-6"],
     priority: true,
-    hardNote: "MS-LS4-6 was the hardest life-science standard on the real 2025 NY test (6% fully correct) — this unit gets extra reps.",
+    hardNote: "MS-LS4-6 was the hardest life-science standard on the real 2025 NY test (**6%** fully correct) — this unit gets extra reps.",
     blurb: "The evidence for how populations change over time, and the mechanism of natural selection.",
     notes: {
       key: [
-        "Natural selection: individuals with traits better suited to their environment are more likely to survive and reproduce, passing those traits on. Over many generations, helpful traits become more common in a population.",
-        "Evidence for evolutionary relationships includes fossil evidence (similar structures in the fossil record over time), anatomical evidence (similar body structures across species, like a whale's flipper and a human arm), and embryological evidence (similar early development stages across related species).",
-        "Adaptation is a trait that improves an organism's chance of survival/reproduction in its specific environment — it develops over generations, not within one organism's lifetime.",
-        "Artificial selection is when humans (not nature) choose which organisms reproduce, based on desired traits — used in breeding crops and pets.",
+        "**Natural selection**: individuals with traits better suited to their environment are more likely to survive and reproduce, passing those traits on. Over many generations, helpful traits become more common in a population.",
+        "Evidence for evolutionary relationships includes **fossil evidence** *(similar structures in the fossil record over time)*, **anatomical evidence** *(similar body structures across species, like a whale's flipper and a human arm)*, and **embryological evidence** *(similar early development stages across related species)*.",
+        "**Adaptation** is a trait that improves an organism's chance of survival/reproduction in its specific environment — it develops over generations, not within one organism's lifetime.",
+        "**Artificial selection** is when humans *(not nature)* choose which organisms reproduce, based on desired traits — used in breeding crops and pets.",
       ],
       watch: [
         "An individual organism does not evolve during its own lifetime — a population evolves across generations. This is one of the most common mix-ups.",
-        "Natural selection doesn't 'try' to improve a species on purpose — it's simply that better-suited individuals survive and reproduce more, with no intention involved.",
+        "**Natural selection** doesn't 'try' to improve a species on purpose — it's simply that better-suited individuals survive and reproduce more, with no intention involved.",
       ],
       analogy: "Natural selection works like a filter, not a sculptor: nature doesn't shape individuals to fit their environment; it just filters out individuals whose traits don't work as well, generation after generation.",
       vocab: ["natural selection", "adaptation", "artificial selection", "fossil evidence", "anatomical evidence", "embryological evidence"],
@@ -888,14 +900,14 @@ var UNITS = [
     blurb: "What matter is made of, how to describe it, and how it changes state.",
     notes: {
       key: [
-        "All matter is made of atoms, which combine to form molecules. A pure substance is either an element (one type of atom) or a compound (two or more elements chemically bonded).",
-        "A mixture combines substances that are not chemically bonded — they keep their own properties and can usually be separated by physical means.",
-        "Physical properties (color, density, melting point) can be observed without changing what the substance is. Chemical properties describe how a substance reacts to form a new substance.",
-        "As thermal energy is added to a substance, particles move faster and spread further apart — this drives changes of state (solid → liquid → gas).",
+        "All matter is made of atoms, which combine to form molecules. A pure substance is either an **element** (one type of **atom**) or a **compound** *(two or more elements chemically bonded)*.",
+        "A **mixture** combines substances that are not chemically bonded — they keep their own properties and can usually be separated by physical means.",
+        "Physical properties *(color, density, melting point)* can be observed without changing what the substance is. Chemical properties describe how a substance reacts to form a new substance.",
+        "As thermal energy is added to a substance, particles move faster and spread further apart — this drives changes of state *(solid → liquid → gas)*.",
       ],
       watch: [
-        "A physical change (melting, cutting, dissolving) doesn't create a new substance. A chemical change does. This distinction gets tested constantly.",
-        "Temperature can stay constant during a state change (like water boiling at 100°C) even while energy keeps being added — that energy is going into breaking particle attractions, not raising temperature.",
+        "A physical change *(melting, cutting, dissolving)* doesn't create a new substance. A chemical change does. This distinction gets tested constantly.",
+        "Temperature can stay constant during a state change *(like water boiling at 100°C)* even while energy keeps being added — that energy is going into breaking particle attractions, not raising temperature.",
       ],
       analogy: "Think of particles in a solid as people standing still in packed rows, a liquid as the same people walking around a crowded room, and a gas as people sprinting through a wide-open field.",
       vocab: ["atom", "molecule", "element", "compound", "mixture", "physical property", "chemical property"],
@@ -958,18 +970,18 @@ var UNITS = [
     title: "Chemical Reactions & Conservation of Mass",
     standards: ["MS-PS1-2", "MS-PS1-5"],
     priority: true,
-    hardNote: "MS-PS1-2 was one of the hardest standards on the real 2025 NY test (only 6-35% correct depending on the question) — extra reps included.",
+    hardNote: "MS-PS1-2 was one of the hardest standards on the real 2025 NY test (only 6-**35%** correct depending on the question) — extra reps included.",
     blurb: "How to tell a chemical reaction happened, and why mass is always conserved.",
     notes: {
       key: [
-        "Evidence of a chemical reaction: color change, gas bubbles forming, a solid forming from two liquids (precipitate), temperature change, or light/odor produced that wasn't there before.",
-        "Law of conservation of mass: in a chemical reaction, matter is never created or destroyed — the total mass of reactants equals the total mass of products, even though the substances themselves are rearranged.",
-        "A chemical equation shows reactants (starting substances) turning into products (new substances) — the same number of each type of atom must appear on both sides.",
-        "Rusting (iron + water + oxygen → iron hydroxide) is a real-world chemical reaction that requires both water and oxygen to occur — remove either one, and rust won't form.",
+        "Evidence of a **chemical reaction**: color change, gas bubbles forming, a solid forming from two liquids (**precipitate**), temperature change, or light/odor produced that wasn't there before.",
+        "Law of **conservation of mass**: in a **chemical reaction**, matter is never created or destroyed — the total mass of reactants equals the total mass of products, even though the substances themselves are rearranged.",
+        "A chemical equation shows reactants *(starting substances)* turning into products *(new substances)* — the same number of each type of atom must appear on both sides.",
+        "Rusting *(iron + water + oxygen → iron hydroxide)* is a real-world **chemical reaction** that requires both water and oxygen to occur — remove either one, and rust won't form.",
       ],
       watch: [
-        "Bubbles forming is only evidence of a chemical reaction if a new gas is being produced — boiling water also makes bubbles, but that's a physical change (state change), not a chemical one.",
-        "'Conservation of mass' means the total mass doesn't change — it does NOT mean the number of molecules or the physical form has to stay the same.",
+        "Bubbles forming is only evidence of a **chemical reaction** if a new gas is being produced — boiling water also makes bubbles, but that's a physical change *(state change)*, not a chemical one.",
+        "'**Conservation of mass**' means the total mass doesn't change — it does NOT mean the number of molecules or the physical form has to stay the same.",
       ],
       analogy: "A chemical reaction is like rearranging LEGO bricks into a new structure: you still have the exact same bricks (mass conserved), just connected differently (new substance).",
       vocab: ["chemical reaction", "reactant", "product", "conservation of mass", "precipitate"],
@@ -1021,18 +1033,18 @@ var UNITS = [
     title: "Energy: Forms, Transfer & Conservation",
     standards: ["MS-PS3-1", "MS-PS3-2", "MS-PS3-5"],
     priority: true,
-    hardNote: "MS-PS3-5 was one of the hardest standards on the real 2025 NY test (14-15% fully correct) — extra reps included.",
+    hardNote: "MS-PS3-5 was one of the hardest standards on the real 2025 NY test (14-**15%** fully correct) — extra reps included.",
     blurb: "Kinetic and potential energy, how energy transfers, and the law of conservation of energy.",
     notes: {
       key: [
-        "Kinetic energy (KE) is the energy of motion: KE = 0.5 × mass × speed². Doubling the speed quadruples the kinetic energy; doubling the mass only doubles it.",
-        "Potential energy is stored energy based on position or condition — gravitational potential energy increases the higher (and heavier) an object is.",
-        "Law of conservation of energy: energy cannot be created or destroyed, only transferred or transformed from one form to another (e.g., potential → kinetic, electrical → thermal).",
-        "'Work' is done on an object when a force causes it to move; doing work on an object changes its energy (e.g., a crane lifting a car increases the car's potential energy).",
+        "**Kinetic energy** *(KE)* is the energy of motion: KE = 0.5 × mass × speed². Doubling the speed quadruples the kinetic energy; doubling the mass only doubles it.",
+        "**Potential energy** is stored energy based on position or condition — gravitational potential energy increases the higher *(and heavier)* an object is.",
+        "Law of **conservation of energy**: energy cannot be created or destroyed, only transferred or transformed from one form to another *(e.g., potential → kinetic, electrical → thermal)*.",
+        "'**Work**' is done on an object when a force causes it to move; doing work on an object changes its energy (e.g., a crane lifting a car increases the car's **potential energy**).",
       ],
       watch: [
-        "Kinetic energy depends on speed SQUARED, not speed directly — this is one of the most commonly missed relationships. Doubling speed = 4x the kinetic energy, not 2x.",
-        "'Higher position = more potential energy' assumes mass stays the same — a heavier object at the same height also has more potential energy.",
+        "**Kinetic energy** depends on speed SQUARED, not speed directly — this is one of the most commonly missed relationships. Doubling speed = 4x the kinetic energy, not 2x.",
+        "'Higher position = more **potential energy**' assumes mass stays the same — a heavier object at the same height also has more potential energy.",
       ],
       analogy: "Think of potential energy like a stretched rubber band (stored, waiting) and kinetic energy like that same rubber band snapping forward (energy of motion, being used).",
       vocab: ["kinetic energy", "potential energy", "conservation of energy", "work"],
@@ -1083,18 +1095,18 @@ var UNITS = [
     title: "Forces, Motion & Magnetism",
     standards: ["MS-PS2-1", "MS-PS2-2", "MS-PS2-3", "MS-PS2-4", "MS-PS2-5"],
     priority: true,
-    hardNote: "MS-PS2-3 and MS-PS2-4 were among the hardest standards on the real 2025 NY test (6-24% fully correct) — extra reps included.",
+    hardNote: "MS-PS2-3 and MS-PS2-4 were among the hardest standards on the real 2025 NY test (6-**24%** fully correct) — extra reps included.",
     blurb: "How forces affect motion, and the practical behavior of magnets and electromagnets.",
     notes: {
       key: [
-        "A net force causes a change in an object's motion (speed or direction). If forces are balanced (net force = 0), motion doesn't change — an object at rest stays at rest, and a moving object keeps moving at constant velocity.",
-        "Gravitational force exists between any two objects with mass, and depends on both objects' masses and the distance between them — more mass or less distance means a stronger force.",
-        "An electromagnet's strength can be increased by increasing the current, increasing the number of wire coils, or using certain core metals (like iron) — these are the variables you can test.",
-        "Magnetic force acts at a distance — objects don't need to touch for a magnetic field to affect them, unlike most everyday forces.",
+        "A **net force** causes a change in an object's motion *(speed or direction)*. If forces are balanced *(net force = 0)*, motion doesn't change — an object at rest stays at rest, and a moving object keeps moving at constant velocity.",
+        "**Gravitational force** exists between any two objects with mass, and depends on both objects' masses and the distance between them — more mass or less distance means a stronger force.",
+        "An **electromagnet**'s strength can be increased by increasing the current, increasing the number of wire coils, or using certain core metals *(like iron)* — these are the variables you can test.",
+        "Magnetic force acts at a distance — objects don't need to touch for a **magnetic field** to affect them, unlike most everyday forces.",
       ],
       watch: [
-        "'Balanced forces' does NOT mean 'no forces are acting' — it means the forces cancel out, so there's no net force and no change in motion.",
-        "A stronger gravitational force doesn't always mean a closer object — mass and distance both matter and can trade off.",
+        "'**Balanced forces**' does NOT mean 'no forces are acting' — it means the forces cancel out, so there's no **net force** and no change in motion.",
+        "A stronger **gravitational force** doesn't always mean a closer object — mass and distance both matter and can trade off.",
       ],
       analogy: "Think of a tug-of-war: if both sides pull with equal strength, the rope doesn't move (balanced forces, zero net force) — but that doesn't mean no one is pulling.",
       vocab: ["net force", "balanced forces", "gravitational force", "electromagnet", "magnetic field"],
@@ -1160,13 +1172,13 @@ var UNITS = [
     notes: {
       key: [
         "A wave transfers energy from one place to another without transferring matter along with it — like a stadium 'wave' where people stay in their seats but the wave itself travels.",
-        "Wave properties: amplitude (height, related to energy/loudness or brightness), wavelength (distance between repeating points), and frequency (how many waves pass a point per second).",
-        "Sound is a mechanical wave — it needs a medium (air, water, solid) to travel through, and cannot travel through a vacuum.",
-        "Light is an electromagnetic wave — it does NOT need a medium and can travel through empty space, which is how sunlight reaches Earth.",
+        "Wave properties: **amplitude** *(height, related to energy/loudness or brightness)*, **wavelength** *(distance between repeating points)*, and **frequency** *(how many waves pass a point per second)*.",
+        "Sound is a **mechanical wave** — it needs a **medium** *(air, water, solid)* to travel through, and cannot travel through a vacuum.",
+        "Light is an **electromagnetic wave** — it does NOT need a **medium** and can travel through empty space, which is how sunlight reaches Earth.",
       ],
       watch: [
-        "Higher amplitude means more energy — don't confuse amplitude (height of the wave) with wavelength (length of the wave).",
-        "Sound needs a medium; light does not. This distinction is one of the most tested facts about waves.",
+        "Higher **amplitude** means more energy — don't confuse amplitude *(height of the wave)* with **wavelength** *(length of the wave)*.",
+        "Sound needs a **medium**; light does not. This distinction is one of the most tested facts about waves.",
       ],
       analogy: "A wave is like the 'wave' fans do in a stadium — the motion (energy) travels all the way around, but no single person actually leaves their seat (matter doesn't travel with it).",
       vocab: ["amplitude", "wavelength", "frequency", "mechanical wave", "electromagnetic wave", "medium"],
@@ -1211,17 +1223,17 @@ var UNITS = [
     title: "Plate Tectonics & Earth's Changing Surface",
     standards: ["MS-ESS2-1", "MS-ESS2-2", "MS-ESS2-3"],
     priority: true,
-    hardNote: "MS-ESS2-3 was one of the hardest standards on the real 2025 NY test (7-18% fully correct) — extra reps included.",
+    hardNote: "MS-ESS2-3 was one of the hardest standards on the real 2025 NY test (7-**18%** fully correct) — extra reps included.",
     blurb: "Evidence that Earth's crust is made of moving plates, and how that reshapes the surface over time.",
     notes: {
       key: [
-        "Earth's crust is broken into large tectonic plates that move slowly (a few centimeters per year) on the layer beneath them.",
-        "Evidence for plate motion includes: matching coastlines across oceans (like South America and Africa), matching rock ages and fossils on now-separated continents, and mid-ocean ridges where new crust forms and spreads outward (ocean floor gets older with distance from the ridge).",
-        "Plate boundaries are where most major geologic features form: mountains (colliding plates, like the Himalayas), trenches (one plate sinking under another), and new ocean floor (plates spreading apart).",
-        "Weathering breaks rock down in place (physically or chemically); erosion moves the broken pieces elsewhere (by water, wind, or ice).",
+        "Earth's crust is broken into large tectonic plates that move slowly *(a few centimeters per year)* on the layer beneath them.",
+        "Evidence for plate motion includes: matching coastlines across oceans *(like South America and Africa)*, matching rock ages and fossils on now-separated continents, and mid-ocean ridges where new crust forms and spreads outward *(ocean floor gets older with distance from the ridge)*.",
+        "Plate boundaries are where most major geologic features form: mountains *(colliding plates, like the Himalayas)*, trenches *(one plate sinking under another)*, and new ocean floor *(plates spreading apart)*.",
+        "**Weathering** breaks rock down in place *(physically or chemically)*; **erosion** moves the broken pieces elsewhere *(by water, wind, or ice)*.",
       ],
       watch: [
-        "Weathering and erosion are often confused: weathering = breaking down, erosion = moving away. A rock can weather without eroding if nothing carries the pieces off.",
+        "**Weathering** and **erosion** are often confused: weathering = breaking down, erosion = moving away. A rock can weather without eroding if nothing carries the pieces off.",
         "Continents don't just 'happen' to fit together like puzzle pieces — that fit is direct evidence they were once joined.",
       ],
       analogy: "Tectonic plates are like slow-moving rafts on a lake — where two rafts crash together, material piles up (mountains); where two pull apart, new water (or in this case, new crust) fills the gap.",
@@ -1273,18 +1285,18 @@ var UNITS = [
     title: "Weather, Climate & the Water Cycle",
     standards: ["MS-ESS2-4", "MS-ESS2-5", "MS-ESS2-6"],
     priority: true,
-    hardNote: "MS-ESS2-6 was the single hardest standard on the entire real 2025 NY state test — only 1% of students got it fully correct. This unit gets the most extra reps in the whole build.",
+    hardNote: "MS-ESS2-6 was the single hardest standard on the entire real 2025 NY state test — only **1%** of students got it fully correct. This unit gets the most extra reps in the whole build.",
     blurb: "The water cycle, what drives weather patterns, and the difference between weather and climate.",
     notes: {
       key: [
-        "The water cycle: evaporation (liquid → vapor, mostly from oceans, using solar energy), condensation (vapor → tiny liquid droplets, forming clouds), precipitation (water falling as rain/snow), and runoff/collection (water gathering back into bodies of water).",
-        "Weather is the day-to-day state of the atmosphere (today's temperature, rain). Climate is the long-term average pattern of weather in a region over decades.",
-        "Air masses with different temperatures and humidity interact at fronts, driving most day-to-day weather changes.",
-        "Feedback loops in climate: for example, less ice means less sunlight reflected (lower albedo), which means more heat absorbed, which melts more ice — a loop that reinforces itself.",
+        "The water cycle: **evaporation** *(liquid → vapor, mostly from oceans, using solar energy)*, **condensation** *(vapor → tiny liquid droplets, forming clouds)*, **precipitation** *(water falling as rain/snow)*, and runoff/collection *(water gathering back into bodies of water)*.",
+        "**Weather** is the day-to-day state of the atmosphere *(today's temperature, rain)*. **Climate** is the long-term average pattern of weather in a region over decades.",
+        "Air masses with different temperatures and humidity interact at fronts, driving most day-to-day **weather** changes.",
+        "Feedback loops in **climate**: for example, less ice means less sunlight reflected (lower **albedo**), which means more heat absorbed, which melts more ice — a loop that reinforces itself.",
       ],
       watch: [
-        "'Weather' and 'climate' get mixed up constantly — a single cold day does not disprove long-term warming; that's a weather event, not a climate trend.",
-        "This unit's core process (albedo feedback, ESS2-6) was the hardest standard on the entire real NY state test — take your time and re-read the explanations here, twice if needed.",
+        "'**Weather**' and '**climate**' get mixed up constantly — a single cold day does not disprove long-term warming; that's a weather event, not a climate trend.",
+        "This unit's core process (**albedo** feedback, ESS2-6) was the hardest standard on the entire real NY state test — take your time and re-read the explanations here, twice if needed.",
       ],
       analogy: "Weather is like your mood today; climate is like your general personality over the last ten years. One bad mood doesn't change your personality, and one cold week doesn't change the climate.",
       vocab: ["evaporation", "condensation", "precipitation", "weather", "climate", "feedback loop", "albedo"],
@@ -1343,14 +1355,14 @@ var UNITS = [
     title: "Earth, Moon, Sun & the Solar System",
     standards: ["MS-ESS1-1", "MS-ESS1-2", "MS-ESS1-3", "MS-ESS1-4"],
     priority: true,
-    hardNote: "MS-ESS1-2 and MS-ESS1-3 were among the hardest standards on the real 2025 NY test (6-31% fully correct) — extra reps included.",
+    hardNote: "MS-ESS1-2 and MS-ESS1-3 were among the hardest standards on the real 2025 NY test (6-**31%** fully correct) — extra reps included.",
     blurb: "Scale, motion, and gravity in the Earth-Moon-Sun system and the wider solar system.",
     notes: {
       key: [
-        "The Moon's phases are caused by how much of its sunlit half is visible from Earth as it orbits — not by Earth's shadow (that's an eclipse, a different, rarer event).",
-        "Seasons are caused by Earth's tilted axis (about 23.5°), which changes how directly sunlight hits different parts of Earth throughout the year — NOT by Earth's distance from the Sun changing.",
-        "Gravitational force keeps moons in orbit around planets, and planets in orbit around the Sun; the strength of this force depends on the masses of both objects and the distance between them.",
-        "Scale in the solar system is almost impossible to picture accurately without a to-scale model — real distances and sizes are vastly larger than diagrams usually suggest.",
+        "The Moon's phases are caused by how much of its sunlit half is visible from Earth as it orbits — not by Earth's shadow (that's an **eclipse**, a different, rarer event).",
+        "Seasons are caused by Earth's tilted axis *(about 23.5°)*, which changes how directly sunlight hits different parts of Earth throughout the year — NOT by Earth's distance from the Sun changing.",
+        "**Gravitational force** keeps moons in **orbit** around planets, and planets in orbit around the Sun; the strength of this force depends on the masses of both objects and the distance between them.",
+        "Scale in the solar system is almost impossible to picture accurately without a **to-scale model** — real distances and sizes are vastly larger than diagrams usually suggest.",
       ],
       watch: [
         "A very common wrong idea: Earth is closer to the Sun in summer. It's not — axis tilt, not distance, causes seasons.",
@@ -1413,17 +1425,17 @@ var UNITS = [
     title: "Human Impact, Resources & Engineering Design",
     standards: ["MS-ESS3-1", "MS-ESS3-2", "MS-ESS3-3", "MS-ESS3-4", "MS-ETS1-1", "MS-ETS1-2"],
     priority: true,
-    hardNote: "Several of these standards were among the harder ones on the real 2025 NY test (20-32% fully correct) — extra reps included.",
+    hardNote: "Several of these standards were among the harder ones on the real 2025 NY test (20-**32%** fully correct) — extra reps included.",
     blurb: "How human resource use affects Earth's systems, and how engineers balance criteria and constraints when designing solutions.",
     notes: {
       key: [
-        "Human population growth and resource consumption (freshwater, minerals, energy) change the appearance, composition, and structure of Earth's systems, and the rate of that change matters as much as the change itself.",
-        "A criterion is a requirement a design solution must meet (e.g., 'must not rust'). A constraint is a limitation on the solution (e.g., 'must be affordable' or 'must be completed by a deadline').",
+        "Human population growth and resource consumption *(freshwater, minerals, energy)* change the appearance, composition, and structure of Earth's systems, and the rate of that change matters as much as the change itself.",
+        "A **criterion** is a requirement a design solution must meet *(e.g., 'must not rust')*. A **constraint** is a limitation on the solution *(e.g., 'must be affordable' or 'must be completed by a deadline')*.",
         "Engineers compare competing design solutions systematically against the same list of criteria and constraints, rather than picking based on a single feature.",
-        "Non-renewable resources (fossil fuels, minerals) are used far faster than they naturally form; renewable resources (solar, wind, sustainably managed forests) can replenish on a human timescale if managed responsibly.",
+        "Non-renewable resources *(fossil fuels, minerals)* are used far faster than they naturally form; renewable resources *(solar, wind, sustainably managed forests)* can replenish on a human timescale if managed responsibly.",
       ],
       watch: [
-        "'Criteria' (what it must achieve) and 'constraints' (what limits the solution) are easy to swap — a budget limit is a constraint; 'must not rust' is a criterion.",
+        "'Criteria' *(what it must achieve)* and 'constraints' *(what limits the solution)* are easy to swap — a budget limit is a **constraint**; 'must not rust' is a **criterion**.",
         "The single 'best' engineering solution isn't the cheapest or the strongest alone — it's whichever option satisfies the most criteria and constraints together.",
       ],
       analogy: "Choosing an engineering solution is like picking an apartment: criteria are your must-haves (near school, has a kitchen), constraints are your limits (your budget, the neighborhoods available) — the best choice satisfies both lists at once, not just one.",
@@ -1500,6 +1512,107 @@ function typed(id, stem, accepted, explanation, meta) {
   return { id, format: "typed", stem, accepted, explanation, ...meta };
 }
 
+// ---------------------------------------------------------------------------
+// Glossary: definitions for every vocab term across all units, keyed lowercase.
+// Powers the tappable vocab chips (tap a term -> definition + pronunciation).
+// ---------------------------------------------------------------------------
+var GLOSSARY = {
+  "cell theory": "The idea that all living things are made of cells, cells are the basic unit of life, and every cell comes from a cell that already existed.",
+  "organelle": "A tiny structure inside a cell that does one specific job, like a mini-organ for the cell.",
+  "nucleus": "The organelle that stores a cell's DNA and directs what the cell does.",
+  "mitochondria": "The organelle that releases usable energy from food for the cell to use.",
+  "prokaryote": "A simple organism, like a bacterium, whose cell has no nucleus — its DNA just floats in the cytoplasm.",
+  "eukaryote": "An organism whose cells have a nucleus that holds the DNA — this includes animals, plants, fungi, and more.",
+  "photosynthesis": "The process plants use to turn light energy, water, and carbon dioxide into sugar (glucose) and oxygen.",
+  "cellular respiration": "The process cells use to break down glucose with oxygen to release usable energy.",
+  "glucose": "A simple sugar that cells use as their main fuel for energy.",
+  "chlorophyll": "The green pigment in plants that captures light energy for photosynthesis.",
+  "matter cycling": "The way atoms and molecules get reused over and over between living things and their environment, instead of disappearing.",
+  "energy flow": "The one-way movement of energy through an ecosystem, starting with sunlight and ending as heat.",
+  "homeostasis": "The body's effort to keep internal conditions, like temperature, steady even when things change outside.",
+  "stimulus": "Anything that triggers a response — like a loud noise or bright light.",
+  "response": "The reaction that happens after a stimulus is detected, like jumping at a loud noise.",
+  "organ system": "A group of organs that work together to do a job, like the digestive system.",
+  "sensory receptor": "A part of the body that detects a stimulus, like the eyes detecting light.",
+  "gene": "A section of DNA that carries instructions for one trait.",
+  "allele": "One version of a gene — you get one allele from each parent for every gene.",
+  "dominant": "An allele that shows up in appearance even if only one copy is present.",
+  "recessive": "An allele that only shows up in appearance if both copies are the recessive version.",
+  "punnett square": "A grid used to predict the possible gene combinations offspring could inherit from two parents.",
+  "mutation": "A change in a gene's DNA sequence — it can be harmful, helpful, or have no effect at all.",
+  "carrier": "Someone who has one copy of a recessive allele but doesn't show the trait themselves.",
+  "asexual reproduction": "Reproduction from a single parent that produces offspring genetically identical to that parent.",
+  "sexual reproduction": "Reproduction that combines genetic material from two parents, creating genetic variation in the offspring.",
+  "genetic variation": "Differences in genes among individuals in a population — it's what makes offspring not identical to their parents.",
+  "reproductive success": "How well an organism manages to produce offspring that survive and reproduce themselves.",
+  "food web": "A diagram showing how many different organisms in an ecosystem are connected by what eats what.",
+  "competition": "What happens when two organisms need the same limited resource, like food or space.",
+  "symbiosis": "A close, long-term relationship between two different species living together.",
+  "carrying capacity": "The largest population size an environment's resources can sustainably support.",
+  "producer": "An organism, like a plant, that makes its own food using sunlight.",
+  "consumer": "An organism that gets energy by eating other organisms.",
+  "decomposer": "An organism that breaks down dead material and recycles its nutrients back into the ecosystem.",
+  "biodiversity": "The variety of different species living in an ecosystem.",
+  "ecosystem services": "The free benefits humans get from a healthy ecosystem, like clean water or pollination.",
+  "conservation": "Efforts to protect and manage natural resources and habitats so they last.",
+  "invasive species": "A species introduced to a new area where it causes harm to the native ecosystem.",
+  "natural selection": "The process where organisms with traits better suited to their environment survive and reproduce more, passing those traits on.",
+  "adaptation": "A trait that improves an organism's chances of surviving and reproducing in its environment.",
+  "artificial selection": "When humans, not nature, choose which organisms reproduce based on desired traits.",
+  "fossil evidence": "Preserved remains or traces of ancient organisms that show how life has changed over time.",
+  "anatomical evidence": "Similarities in body structure between different species that suggest a shared ancestor.",
+  "embryological evidence": "Similarities in early development between species that suggest a shared ancestor.",
+  "atom": "The smallest particle of an element that still has that element's properties.",
+  "molecule": "Two or more atoms bonded together.",
+  "element": "A pure substance made of only one type of atom.",
+  "compound": "A substance made of two or more different elements chemically bonded together.",
+  "mixture": "A combination of substances that are not chemically bonded and can usually be separated by physical means.",
+  "physical property": "A characteristic, like color or density, that can be observed without changing what the substance is.",
+  "chemical property": "A characteristic that describes how a substance reacts to form a new substance.",
+  "chemical reaction": "A process where substances (reactants) are rearranged into new substances (products).",
+  "reactant": "A starting substance in a chemical reaction.",
+  "product": "A new substance formed by a chemical reaction.",
+  "conservation of mass": "The rule that matter can't be created or destroyed in a chemical reaction — the total mass stays the same.",
+  "precipitate": "A solid that forms when two liquids react together.",
+  "kinetic energy": "The energy of motion — it depends on an object's mass and its speed squared.",
+  "potential energy": "Stored energy based on an object's position or condition, like height above the ground.",
+  "conservation of energy": "The rule that energy can't be created or destroyed, only transferred or changed into other forms.",
+  "work": "What happens when a force causes an object to move, changing its energy.",
+  "net force": "The overall force on an object after combining all the individual forces acting on it.",
+  "balanced forces": "Forces that cancel out, resulting in no change to an object's motion.",
+  "gravitational force": "The pulling force between any two objects with mass — stronger with more mass or less distance.",
+  "electromagnet": "A magnet created using electric current flowing through a coil of wire.",
+  "magnetic field": "The invisible area around a magnet where its magnetic force can be felt.",
+  "amplitude": "The height of a wave, related to how much energy it carries.",
+  "wavelength": "The distance between two repeating points on a wave, like crest to crest.",
+  "frequency": "How many waves pass a point every second.",
+  "mechanical wave": "A wave, like sound, that needs a medium (like air or water) to travel through.",
+  "electromagnetic wave": "A wave, like light, that can travel through empty space without needing a medium.",
+  "medium": "The material a wave travels through, like air, water, or a solid.",
+  "tectonic plate": "A large piece of Earth's crust that moves slowly over the layer beneath it.",
+  "plate boundary": "The edge where two tectonic plates meet — most major geologic features form here.",
+  "weathering": "The breaking down of rock in place, either physically or chemically.",
+  "erosion": "The movement of broken-down rock material from one place to another.",
+  "mid-ocean ridge": "An underwater mountain range where new ocean crust forms as plates spread apart.",
+  "evaporation": "The process of liquid water turning into water vapor.",
+  "condensation": "The process of water vapor turning into tiny liquid droplets, forming clouds.",
+  "precipitation": "Water falling from the sky as rain, snow, sleet, or hail.",
+  "weather": "The day-to-day state of the atmosphere, like today's temperature or rain.",
+  "climate": "The long-term average pattern of weather in a region over decades.",
+  "feedback loop": "A cycle where a change causes an effect that then reinforces the original change.",
+  "albedo": "How much sunlight a surface reflects — lighter surfaces like ice have high albedo.",
+  "moon phases": "The changing shapes of the visible Moon caused by how much of its sunlit half faces Earth.",
+  "eclipse": "When one object in space blocks the light of another, like Earth's shadow falling on the Moon.",
+  "axial tilt": "The tilt of Earth's axis, which is the real cause of the seasons.",
+  "orbit": "The curved path an object in space takes around another object due to gravity.",
+  "scale model": "A model that represents real sizes and distances using a consistent, smaller ratio.",
+  "criterion": "A requirement that a design solution must achieve.",
+  "constraint": "A limitation on a design solution, like cost or time.",
+  "non-renewable resource": "A resource, like coal, that's used up far faster than nature can replace it.",
+  "renewable resource": "A resource, like solar energy, that can replenish naturally on a human timescale.",
+  "engineering design": "The process of defining a problem and testing possible solutions against criteria and constraints.",
+};
+
 
 </script>
 <script id="app-source" type="text/plain">
@@ -1553,6 +1666,63 @@ function renderStemWithNegation(stem) {
       <React.Fragment key={i}>{part}</React.Fragment>
     )
   );
+}
+
+// Lightweight inline markup for Learn-tab prose: **bold** and *italic* (no nesting needed —
+// mechanically generated content never nests the two). Lets the same source string carry
+// simple visual emphasis without needing a full markdown parser.
+function renderRichText(text) {
+  if (!text) return text;
+  const tokens = String(text).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  return tokens.map((tok, i) => {
+    if (tok.startsWith("**") && tok.endsWith("**") && tok.length > 4) {
+      return <strong key={i}>{tok.slice(2, -2)}</strong>;
+    }
+    if (tok.startsWith("*") && tok.endsWith("*") && tok.length > 2) {
+      return <em key={i}>{tok.slice(1, -1)}</em>;
+    }
+    return <React.Fragment key={i}>{tok}</React.Fragment>;
+  });
+}
+
+// ---------------------------------------------------------------- pronunciation (Web Speech API)
+// Uses the browser's built-in text-to-speech — there's no bundled audio, so voice quality
+// depends on the device/browser, but this works fully offline with zero extra assets.
+let _voicesCache = null;
+function primeVoices() {
+  if (!window.speechSynthesis) return;
+  const load = () => {
+    const v = window.speechSynthesis.getVoices();
+    if (v && v.length) _voicesCache = v;
+  };
+  load();
+  window.speechSynthesis.onvoiceschanged = load;
+}
+function pickAmericanVoice() {
+  const voices = _voicesCache || (window.speechSynthesis ? window.speechSynthesis.getVoices() : []);
+  if (!voices || !voices.length) return null;
+  return (
+    voices.find((v) => v.lang === "en-US" && /natural|enhanced|premium|google/i.test(v.name)) ||
+    voices.find((v) => v.lang === "en-US") ||
+    voices.find((v) => v.lang && v.lang.startsWith("en")) ||
+    voices[0]
+  );
+}
+function speakTerm(term) {
+  if (!window.speechSynthesis) return false;
+  try {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(term);
+    const voice = pickAmericanVoice();
+    if (voice) utter.voice = voice;
+    utter.lang = "en-US";
+    utter.rate = 0.88;
+    utter.pitch = 1;
+    window.speechSynthesis.speak(utter);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 // -------------------------------------------------------- flat question index
@@ -1973,9 +2143,23 @@ function Dashboard({ state, setState, goTo, mascotPose }) {
   const reviewCount = ALL_QIDS.filter((id) => inReviewList(state.progress[id])).length;
   const weakestDomain = domainStats.slice().sort((a, b) => a.readiness - b.readiness)[0];
   const daysLeft = daysBetween(todayStr(), state.testDate);
+  const [examLockMsg, setExamLockMsg] = useState(null);
 
   function changeTestDate(e) {
     setState((s) => ({ ...s, testDate: e.target.value }));
+  }
+  function bestScoreFor(examNumber) {
+    const attempts = state.examAttempts.filter((a) => a.examNumber === examNumber);
+    if (!attempts.length) return null;
+    return Math.max(...attempts.map((a) => a.scorePct));
+  }
+  function handleExamClick(examNumber) {
+    if (isExamUnlocked(examNumber, state.examAttempts)) {
+      goTo("quiz", { mode: "examSim", examNumber });
+    } else {
+      setExamLockMsg(`Finish Exam ${examNumber - 1} first to unlock Exam ${examNumber}.`);
+      setTimeout(() => setExamLockMsg(null), 3500);
+    }
   }
 
   return (
@@ -2044,14 +2228,46 @@ function Dashboard({ state, setState, goTo, mascotPose }) {
         </button>
       </div>
 
-      <div className="grid-3">
+      <div className="card" style={{ border: "2px solid var(--gold)" }}>
+        <h2 style={{ fontSize: 17, marginBottom: 4 }}>⏱️ Iowa Science Practice Exams</h2>
+        <p style={{ margin: "0 0 12px", fontSize: 13.5, color: "var(--ink-soft)" }}>
+          These three timed forms are the closest thing to the real test — everything else on this dashboard exists to help Saarah do well on
+          them. Each exam has its own {EXAM_LENGTH} questions (none repeat across the three), balanced evenly across Life, Physical, and
+          Earth &amp; Space Science, with a soft 35-minute timer matching Iowa's real pacing.
+        </p>
+        <div className="grid-3">
+          {[1, 2, 3].map((n) => {
+            const unlocked = isExamUnlocked(n, state.examAttempts);
+            const done = isExamDone(n, state.examAttempts);
+            const best = bestScoreFor(n);
+            return (
+              <button
+                key={n}
+                className="card card-tappable"
+                style={{ margin: 0, opacity: unlocked ? 1 : 0.55, background: unlocked ? "var(--card)" : "var(--card-2)" }}
+                onClick={() => handleExamClick(n)}
+              >
+                <h3 style={{ fontSize: 16, marginBottom: 4 }}>
+                  {unlocked ? "📝" : "🔒"} Exam {n} {done && "✓"}
+                </h3>
+                <p style={{ margin: 0, fontSize: 13, color: "var(--ink-soft)" }}>
+                  {unlocked ? (best !== null ? `Best score: ${best}%` : `${EXAM_LENGTH} questions, ~35 min`) : `Unlocks after Exam ${n - 1}`}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+        {examLockMsg && (
+          <p className="pop" style={{ marginTop: 10, marginBottom: 0, color: "var(--bad)", fontWeight: 700, fontSize: 13.5 }}>
+            🔒 {examLockMsg}
+          </p>
+        )}
+      </div>
+
+      <div className="grid-2">
         <button className="card card-tappable" onClick={() => goTo("quiz", { mode: "interleaved", scope: "all" })}>
           <h3 style={{ fontSize: 16, marginBottom: 4 }}>🔀 Mixed Practice</h3>
           <p style={{ margin: 0, fontSize: 13.5, color: "var(--ink-soft)" }}>Shuffled across all three domains.</p>
-        </button>
-        <button className="card card-tappable" onClick={() => goTo("quiz", { mode: "examSim" })}>
-          <h3 style={{ fontSize: 16, marginBottom: 4 }}>⏱️ Iowa Exam Simulation</h3>
-          <p style={{ margin: 0, fontSize: 13.5, color: "var(--ink-soft)" }}>35-min realistic practice round.</p>
         </button>
         <button className="card card-tappable" onClick={() => goTo("planner", {})}>
           <h3 style={{ fontSize: 16, marginBottom: 4 }}>🗓️ Study Planner</h3>
@@ -2117,6 +2333,7 @@ function DomainView({ domainKey, state, goTo, goBack }) {
 // ================================================================ UNIT VIEW
 function UnitView({ unitId, state, goTo }) {
   const [tab, setTab] = useState("learn");
+  const [activeVocab, setActiveVocab] = useState(null);
   const unit = UNITS.find((u) => u.id === unitId);
   const d = DOMAINS[unit.domain];
   const qids = qidsForUnit(unit.id);
@@ -2154,14 +2371,14 @@ function UnitView({ unitId, state, goTo }) {
 
       {tab === "learn" && (
         <div className="card">
-          {unit.hardNote && <div className="callout callout-watch">📊 {unit.hardNote}</div>}
-          <p>{unit.blurb}</p>
+          {unit.hardNote && <div className="callout callout-watch">📊 {renderRichText(unit.hardNote)}</div>}
+          <p>{renderRichText(unit.blurb)}</p>
           <div className="note-block">
             <div className="callout callout-key">
               <strong>Key facts</strong>
               <ul>
                 {unit.notes.key.map((k, i) => (
-                  <li key={i}>{k}</li>
+                  <li key={i}>{renderRichText(k)}</li>
                 ))}
               </ul>
             </div>
@@ -2169,16 +2386,19 @@ function UnitView({ unitId, state, goTo }) {
               <strong>⚠️ Watch out</strong>
               <ul>
                 {unit.notes.watch.map((k, i) => (
-                  <li key={i}>{k}</li>
+                  <li key={i}>{renderRichText(k)}</li>
                 ))}
               </ul>
             </div>
-            <div className="callout callout-analogy">{unit.notes.analogy}</div>
-            <div style={{ marginTop: 10 }}>
+            <div className="callout callout-analogy">{renderRichText(unit.notes.analogy)}</div>
+            <div style={{ marginTop: 14 }}>
+              <p style={{ fontSize: 12.5, color: "var(--ink-faint)", fontWeight: 700, marginBottom: 6 }}>
+                🔊 Tap any word to hear it and see what it means
+              </p>
               {unit.notes.vocab.map((v, i) => (
-                <span className="vocab-chip" key={i}>
+                <button className="vocab-chip" key={i} onClick={() => setActiveVocab(v)}>
                   {v}
-                </span>
+                </button>
               ))}
             </div>
           </div>
@@ -2207,6 +2427,44 @@ function UnitView({ unitId, state, goTo }) {
           )}
         </div>
       )}
+      {activeVocab && <VocabModal term={activeVocab} onClose={() => setActiveVocab(null)} />}
+    </div>
+  );
+}
+
+// ================================================================ VOCAB MODAL
+function VocabModal({ term, onClose }) {
+  const definition = GLOSSARY[term.toLowerCase()] || "Definition coming soon.";
+  const [spoke, setSpoke] = useState(false);
+  const supported = typeof window !== "undefined" && !!window.speechSynthesis;
+  function handleListen() {
+    const ok = speakTerm(term);
+    setSpoke(ok);
+    setTimeout(() => setSpoke(false), 1200);
+  }
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal-sheet" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={`Definition of ${term}`}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+          <h2 style={{ margin: 0 }}>{term}</h2>
+          <button className="icon-btn" onClick={onClose} aria-label="Close">
+            ✕
+          </button>
+        </div>
+        <p style={{ marginTop: 14, fontSize: 16, lineHeight: 1.6 }}>{definition}</p>
+        {supported ? (
+          <button className="btn btn-primary btn-block" onClick={handleListen} style={{ marginTop: 8 }}>
+            {spoke ? "🔊 Playing…" : "🔊 Listen"}
+          </button>
+        ) : (
+          <p style={{ fontSize: 12.5, color: "var(--ink-faint)" }}>
+            Pronunciation isn't available in this browser — try Chrome, Safari, or Edge.
+          </p>
+        )}
+        <p style={{ fontSize: 11.5, color: "var(--ink-faint)", marginTop: 10, marginBottom: 0 }}>
+          Uses your device's built-in voice, so how it sounds can vary a little by browser.
+        </p>
+      </div>
     </div>
   );
 }
@@ -2247,6 +2505,66 @@ function ReviewListView({ state, goTo }) {
 }
 
 // ================================================================ QUIZ SESSION
+// ---------------------------------------------------------------------------
+// Three fixed, non-overlapping exam forms (Exam 1/2/3) — like real standardized
+// test forms, each exam is a FIXED set of questions (not re-randomized per
+// attempt), so retaking "Exam 1" always means the same 21 questions again.
+// Per-domain count is capped by the smallest domain's available MC-format
+// bank (Earth & Space has only 23), so each exam keeps a genuine, real-exam-
+// matching 1/3-life, 1/3-physical, 1/3-earth balance rather than an uneven
+// mix — at the cost of a shorter (21-question) form than an unbalanced split
+// would allow. Within each domain, questions are interleaved across units
+// before assignment so every exam gets broad topic coverage, not just
+// whichever unit happens to be listed first.
+// ---------------------------------------------------------------------------
+const PER_DOMAIN_PER_EXAM = 7;
+function buildExamPools() {
+  const pools = { 1: [], 2: [], 3: [] };
+  DOMAIN_ORDER.forEach((domainKey) => {
+    const domainUnits = UNITS.filter((u) => u.domain === domainKey);
+    const perUnitQueues = domainUnits.map((u) => u.questions.filter((q) => q.format === "mc").map((q) => q.id));
+    // round-robin across units so consecutive items in the interleaved list span different units
+    const interleaved = [];
+    let idx = 0;
+    let more = true;
+    while (more) {
+      more = false;
+      perUnitQueues.forEach((queue) => {
+        if (idx < queue.length) {
+          interleaved.push(queue[idx]);
+          more = true;
+        }
+      });
+      idx++;
+    }
+    // round-robin assign into the 3 exam buckets, capped at PER_DOMAIN_PER_EXAM each
+    const counts = { 1: 0, 2: 0, 3: 0 };
+    let bucket = 1;
+    interleaved.forEach((qid) => {
+      for (let tries = 0; tries < 3; tries++) {
+        if (counts[bucket] < PER_DOMAIN_PER_EXAM) {
+          pools[bucket].push(qid);
+          counts[bucket]++;
+          bucket = bucket === 3 ? 1 : bucket + 1;
+          return;
+        }
+        bucket = bucket === 3 ? 1 : bucket + 1;
+      }
+    });
+  });
+  return pools;
+}
+const EXAM_POOLS = buildExamPools();
+const EXAM_LENGTH = PER_DOMAIN_PER_EXAM * DOMAIN_ORDER.length;
+
+function isExamUnlocked(examNumber, examAttempts) {
+  if (examNumber === 1) return true;
+  return examAttempts.some((a) => a.examNumber === examNumber - 1);
+}
+function isExamDone(examNumber, examAttempts) {
+  return examAttempts.some((a) => a.examNumber === examNumber);
+}
+
 function buildQueue(config, progress) {
   if (config.questionIds) return config.questionIds;
   if (config.scope === "unit") {
@@ -2266,14 +2584,9 @@ function buildQueue(config, progress) {
   }
   return [];
 }
-function buildExamSim(progress) {
-  const perDomain = 10;
-  let pool = [];
-  DOMAIN_ORDER.forEach((key) => {
-    const domainQids = qidsForDomain(key).filter((id) => QUESTION_INDEX[id].q.format === "mc");
-    pool = pool.concat(shuffle(domainQids).slice(0, perDomain));
-  });
-  return shuffle(pool);
+function buildExamSim(examNumber) {
+  const pool = EXAM_POOLS[examNumber] || [];
+  return shuffle(pool); // fixed question set, shuffled presentation order per attempt
 }
 
 function QuizSession({ config, state, setState, goBack, goHome, setMascotPose }) {
@@ -2282,7 +2595,7 @@ function QuizSession({ config, state, setState, goBack, goHome, setMascotPose })
   const showConfidence = !isExamSim;
   const revealImmediately = !isExamSim;
 
-  const queue = useMemo(() => (isExamSim ? buildExamSim(state.progress) : buildQueue(config, state.progress)), []); // eslint-disable-line
+  const queue = useMemo(() => (isExamSim ? buildExamSim(config.examNumber) : buildQueue(config, state.progress)), []); // eslint-disable-line
   const [idx, setIdx] = useState(0);
   const [chosen, setChosen] = useState(null); // choice index or typed string
   const [confidence, setConfidence] = useState(null);
@@ -2406,7 +2719,7 @@ function QuizSession({ config, state, setState, goBack, goHome, setMascotPose })
       return {
         ...s,
         progress: newProgress,
-        examAttempts: [...s.examAttempts, { date: todayStr(), scorePct, byDomain, missedIds }].slice(-20),
+        examAttempts: [...s.examAttempts, { date: todayStr(), examNumber: config.examNumber, scorePct, byDomain, missedIds }].slice(-20),
       };
     });
   }
@@ -2434,7 +2747,7 @@ function QuizSession({ config, state, setState, goBack, goHome, setMascotPose })
       });
       return (
         <div className="fade-in card">
-          <h2>Exam simulation complete</h2>
+          <h2>Exam {config.examNumber} complete</h2>
           <p style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 700 }}>{scorePct}%</p>
           <p style={{ color: "var(--ink-soft)" }}>
             {correctCt} of {total} correct — calibrated to Iowa's format, not real secured Iowa items.
@@ -2449,6 +2762,9 @@ function QuizSession({ config, state, setState, goBack, goHome, setMascotPose })
             </div>
           ))}
           <p style={{ fontSize: 13.5, color: "var(--ink-soft)" }}>Missed items have been added to the Review List automatically.</p>
+          {config.examNumber < 3 && (
+            <p style={{ fontSize: 13.5, color: "var(--good)", fontWeight: 700 }}>🔓 Exam {config.examNumber + 1} is now unlocked.</p>
+          )}
           <button className="btn btn-primary btn-block" onClick={goHome}>
             Back to dashboard
           </button>
@@ -2592,13 +2908,19 @@ function generateSchedule(totalDays, totalHours, sessionLenMin) {
   const suppUnits = UNITS.filter((u) => !u.priority);
   const orderedUnits = priorityUnits.concat(suppUnits); // breadth-first: touch every unit once before repeating
   const sessions = [];
+  let examCounter = 0;
   for (let i = 0; i < sessionCount; i++) {
     const dayNum = Math.floor((i / sessionCount) * totalDays) + 1;
     if (i < orderedUnits.length) {
       const u = orderedUnits[i];
       sessions.push({ id: `s${i}`, day: dayNum, label: `Learn + Quiz: ${u.title}`, unitId: u.id, kind: "unit" });
     } else if ((i - orderedUnits.length) % 4 === 3) {
-      sessions.push({ id: `s${i}`, day: dayNum, label: "Iowa Exam Simulation checkpoint", kind: "examSim" });
+      if (examCounter < 3) {
+        examCounter++;
+        sessions.push({ id: `s${i}`, day: dayNum, label: `Take Exam ${examCounter} (timed practice exam)`, kind: "examSim", examNumber: examCounter });
+      } else {
+        sessions.push({ id: `s${i}`, day: dayNum, label: "Retake your weakest Exam so far", kind: "review" });
+      }
     } else {
       sessions.push({ id: `s${i}`, day: dayNum, label: "Mixed practice — Review List + weak spots", kind: "review" });
     }
@@ -2672,8 +2994,10 @@ function PlannerView({ state, setState, goTo }) {
                   style={{ background: "none", border: "none", padding: 0, textAlign: "left", font: "inherit", color: "var(--ink)", cursor: "pointer" }}
                   onClick={() => {
                     if (s.kind === "unit") goTo("unit", { unitId: s.unitId });
-                    else if (s.kind === "examSim") goTo("quiz", { mode: "examSim" });
-                    else goTo("reviewlist", {});
+                    else if (s.kind === "examSim") {
+                      if (isExamUnlocked(s.examNumber, state.examAttempts)) goTo("quiz", { mode: "examSim", examNumber: s.examNumber });
+                      else goTo("dashboard", {});
+                    } else goTo("reviewlist", {});
                   }}
                 >
                   {s.label}
@@ -2820,11 +3144,36 @@ function App() {
     setStateRaw((prev) => (typeof updater === "function" ? updater(prev) : updater));
   }, []);
 
-  // initial load + storage-failure detection
+  useEffect(() => {
+    primeVoices();
+  }, []);
+
+  // initial load + storage-availability detection.
+  // window.storage may not be injected into the page the instant our script runs (this
+  // artifact does real work at load — parsing/compiling everything via Babel before it even
+  // renders), so we poll for it briefly instead of failing on a single early check.
   useEffect(() => {
     (async () => {
-      const testOk = await safeSet("mastery:saarah:science:probe", "ok");
-      if (!testOk) setStorageBroken(true);
+      let available = !!window.storage;
+      if (!available) {
+        for (let i = 0; i < 15 && !available; i++) {
+          await new Promise((r) => setTimeout(r, 300));
+          available = !!window.storage;
+        }
+      }
+      if (!available) {
+        setStorageBroken(true);
+        setLoaded(true);
+        return;
+      }
+      // storage object exists — confirm it actually works, with a couple of retries
+      // before concluding it's broken (a single transient failure isn't proof of anything).
+      let probeOk = false;
+      for (let i = 0; i < 3 && !probeOk; i++) {
+        probeOk = await safeSet("mastery:saarah:science:probe", "ok");
+        if (!probeOk) await new Promise((r) => setTimeout(r, 400));
+      }
+      setStorageBroken(!probeOk);
       const raw = await safeGet(STORAGE_KEY);
       if (raw) {
         try {
@@ -2854,15 +3203,18 @@ function App() {
     });
   }, [loaded]);
 
-  // persist (debounced)
+  // persist (debounced), self-healing: a save that succeeds clears any earlier storage-broken
+  // warning, and a save that fails gets one immediate retry before we flag it to the user.
   useEffect(() => {
     if (!loaded) return;
     if (firstRenderSkip.current) {
       firstRenderSkip.current = false;
       return;
     }
-    const t = setTimeout(() => {
-      safeSet(STORAGE_KEY, JSON.stringify(state));
+    const t = setTimeout(async () => {
+      let ok = await safeSet(STORAGE_KEY, JSON.stringify(state));
+      if (!ok) ok = await safeSet(STORAGE_KEY, JSON.stringify(state));
+      setStorageBroken(!ok);
     }, 600);
     return () => clearTimeout(t);
   }, [state, loaded]);
@@ -2932,7 +3284,7 @@ function App() {
       <div className="app-shell">
         <Header title={titles[nav.name]} onBack={nav.name === "dashboard" ? null : goBack} state={state} toggleTheme={toggleTheme} toggleMuted={toggleMuted} />
         {storageBroken && (
-          <div className="banner banner-warn">⚠️ Progress can't be saved right now (private browsing or storage unavailable) — you can still study this session, but export your progress before closing.</div>
+          <div className="banner banner-warn">⚠️ Progress can't be saved right now — you can still study this session, but export your progress before closing.</div>
         )}
         {celebration && (
           <div className="banner banner-info pop" role="status">
