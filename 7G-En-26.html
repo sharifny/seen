@@ -422,7 +422,6 @@ function recordAnswer(mastery, itemId, isCorrect, confidence, chosenIndex) {
   var today = todayStr();
   im.attempts = (im.attempts || 0) + 1;
 
-  var wasClearedBefore = im.streak >= 2;
   if (isCorrect && confidence === "confident") {
     var lastStreakDate = im._lastStreakDate;
     im.streak = (im.streak || 0) + 1;
@@ -454,15 +453,20 @@ function needsReview(im) {
   return !isCleared(im) || im.everUnsure || (im.attempts > 0 && im.streak < 2);
 }
 
-// Four-tier mistake diagnosis for a fresh wrong/right answer, given history.
-function diagnoseTier(im, isCorrect, confidence) {
-  if (!isCorrect) {
-    var recurring = (im.wrongChoices || []).length >= 1; // will be 2+ after this answer counted
-    if (confidence === "confident") return "confident_miss";
-    if (im.attempts > 1 && im.streak === 0 && (im.durable || im.everUnsure === false && im.attempts > 1)) return "slipped";
-    return "new_gap";
-  }
-  return null;
+// Four-tier mistake diagnosis, evaluated against the item's state *before* this
+// attempt was recorded (call before recordAnswer updates it). Tiers aren't
+// mutually exclusive in reality, so ties are broken by urgency:
+// confident_miss (most urgent, per the hypercorrection-effect research) >
+// recurring_misconception > slipped > new_gap.
+function diagnoseTier(im, isCorrect, confidence, chosenIndex) {
+  if (isCorrect) return null;
+  if (confidence === "confident") return "confident_miss";
+  var pickedThisWrongBefore = chosenIndex !== undefined && chosenIndex !== null &&
+    (im.wrongChoices || []).indexOf(chosenIndex) !== -1;
+  if (pickedThisWrongBefore) return "recurring_misconception";
+  var wasOnAPositiveStreak = (im.streak || 0) >= 1 || im.durable;
+  if (wasOnAPositiveStreak) return "slipped";
+  return "new_gap";
 }
 
 function computeSubtestMastery(mastery, examSet, subtest) {
@@ -1178,7 +1182,7 @@ function StudySession(props) {
 // ============================================================================
 function buildPracticeQueue(mode, subtest, examSet, mastery) {
   if (mode === "reviewList") {
-    return shuffleArr(getReviewListItems(mastery)).map(function (r) { return { item: r.item, subtest: r.subtest, examSet: r.examSet }; }).slice(0, 20);
+    return shuffleArr(getReviewListItems(mastery)).map(function (r) { return { item: r.item, subtest: r.subtest, examSet: r.examSet, reason: r.reason }; }).slice(0, 20);
   }
   if (mode === "interleaved") {
     var all = [];
@@ -1202,6 +1206,7 @@ function MistakeDiagnosisNote(props) {
   if (!tier) return null;
   var labels = {
     confident_miss: { text: "You were confident but this one was wrong — that's exactly the kind that's worth a second look. Research shows a confident mistake, once corrected, tends to stick better than an unsure one.", color: "var(--burgundy)" },
+    recurring_misconception: { text: "You've picked this same wrong answer before — that's a real pattern worth untangling, not just a slip. Worth rereading the explanation slowly this time.", color: "var(--burgundy)" },
     slipped: { text: "You've gotten this right before — looks like this one just slipped. A little rust is normal; it'll come back with another rep.", color: "var(--gold)" },
     new_gap: { text: "First time missing this one — totally normal. It's now on your Review List.", color: "var(--teal)" }
   };
@@ -1255,7 +1260,7 @@ function PracticeSession(props) {
     setSelected(i);
     setRevealed(true);
     var isCorrect = i === correctIndex;
-    var tier = diagnoseTier(im, isCorrect, confidence);
+    var tier = diagnoseTier(im, isCorrect, confidence, i);
     setLastTier(tier);
     onMascotPose(isCorrect ? "happy" : "concerned");
     var updated = recordAnswer(mastery, item.id, isCorrect, confidence, i);
@@ -1281,6 +1286,8 @@ function PracticeSession(props) {
       React.createElement("span", null, "Item " + (idx + 1) + " of " + queue.length),
       React.createElement("span", null, score.correct + "/" + score.total + " correct")
     ),
+    mode === "reviewList" && current.reason ? React.createElement("p", { className: "muted", style: { marginTop: 0, marginBottom: "0.5rem" } },
+      "📌 On your list because: ", React.createElement("strong", null, current.reason)) : null,
     React.createElement("div", { className: "question-card" },
       React.createElement("div", { className: "flex-between", style: { marginBottom: "0.4rem" } },
         React.createElement("span", { className: "badge " + (isDurable(im) ? "badge-durable" : "badge-cleared") },
