@@ -5878,10 +5878,55 @@ function StorageWarningBanner() {
   );
 }
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, info) {
+    console.error("The exam app hit an unexpected error:", error, info && info.componentStack);
+  }
+  render() {
+    if (this.state.hasError) {
+      return React.createElement(
+        "div",
+        { className: "ui-font", style: { maxWidth: 520, margin: "80px auto", padding: "32px 28px", textAlign: "center" } },
+        React.createElement(
+          "div",
+          { className: "card", style: { padding: "32px 28px" } },
+          React.createElement("h2", { style: { fontSize: 22, marginBottom: 12, fontFamily: "'Playfair Display', serif", color: "var(--quill-brown-deep)" } }, "Something went wrong"),
+          React.createElement(
+            "p",
+            { style: { color: "var(--ink-soft)", marginBottom: 20, fontSize: 14, lineHeight: 1.6 } },
+            "This screen ran into an unexpected error. Nothing is lost \u2014 every answer is saved automatically as soon as it's chosen, so reloading will bring you right back to where you left off."
+          ),
+          React.createElement("button", { className: "btn-primary", onClick: () => window.location.reload() }, "Reload and continue")
+        )
+      );
+    }
+    return this.props.children;
+  }
+}
+
 
 function HomeScreen({ state, onStart, onResume, onStartOver, onSetPrediction, onToggleTheme, onToggleMute, onSaveNow, saving, storageWarning }) {
   const hasProgress = !!state.inProgress && !state.inProgress.finishedAt;
   const [predictionDraft, setPredictionDraft] = useState(state.predictedScorePct ?? 75);
+
+  let resumeDetail = null;
+  if (hasProgress) {
+    const sec = SECTIONS[state.inProgress.currentSectionIndex];
+    const secStatus = state.inProgress.sectionStatus[sec.id];
+    const totalAnswered = SECTIONS.reduce((sum, s) => sum + s.questions.filter((q) => state.inProgress.answers[q.id]).length, 0);
+    if (secStatus === "not_started") {
+      resumeDetail = `You're about to start ${sec.title} \u2014 ${totalAnswered} of ${TOTAL_ITEMS} questions answered so far.`;
+    } else {
+      resumeDetail = `You're on Question ${state.inProgress.currentQuestionIndex + 1} of ${sec.questions.length} in ${sec.title} \u2014 ${totalAnswered} of ${TOTAL_ITEMS} answered so far.`;
+    }
+  }
 
   return React.createElement(
     "div",
@@ -5946,6 +5991,12 @@ function HomeScreen({ state, onStart, onResume, onStartOver, onSetPrediction, on
       )
     ),
 
+    hasProgress && React.createElement(
+      "div",
+      { className: "card", style: { padding: "16px 22px", marginBottom: 20, borderLeft: "4px solid var(--sage)" } },
+      React.createElement("p", { className: "ui-font", style: { fontSize: 14, margin: 0, fontWeight: 600 } }, resumeDetail)
+    ),
+
     React.createElement(
       "div",
       { className: "no-print", style: { display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" } },
@@ -5998,7 +6049,7 @@ function PassagePanel({ passage }) {
   if (!passage) return null;
   return React.createElement(
     "div",
-    { className: "card", style: { padding: "20px 22px", marginBottom: 18, maxHeight: 420, overflowY: "auto" } },
+    { className: "card", style: { padding: "20px 22px", marginBottom: 18 } },
     React.createElement("h3", { style: { fontSize: 18, marginBottom: 2 } }, passage.title),
     passage.author && React.createElement("p", { className: "ui-font", style: { fontSize: 13, color: "var(--ink-soft)", marginTop: 0, marginBottom: 10, fontStyle: "italic" } }, "by " + passage.author),
     passage.subtitle && React.createElement("p", { className: "ui-font", style: { fontSize: 13, color: "var(--ink-soft)", marginTop: 0, marginBottom: 10 } }, passage.subtitle),
@@ -6043,66 +6094,96 @@ function QuestionScreen({ section, question, questionIndexInSection, totalInSect
 
   return React.createElement(
     "div",
-    { style: { maxWidth: 820, margin: "0 auto", padding: "20px 20px 80px" } },
+    { style: { paddingBottom: 96 } },
     React.createElement(
       "div",
-      { className: "no-print", style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 } },
-      React.createElement("div", { className: "ui-font", style: { fontWeight: 700, color: "var(--quill-brown-deep)" } }, section.title),
+      {
+        className: "no-print",
+        style: {
+          position: "sticky", top: 0, zIndex: 20, background: "var(--parchment)",
+          paddingTop: 14, paddingBottom: 10, paddingLeft: 20, paddingRight: 20,
+          borderBottom: "1px solid var(--border-soft)",
+        },
+      },
       React.createElement(
         "div",
-        { className: "ui-font", style: { display: "flex", alignItems: "center", gap: 16 } },
+        { style: { maxWidth: 820, margin: "0 auto" } },
         React.createElement(
-          "span",
-          { style: { display: "flex", alignItems: "center", gap: 6, fontWeight: 700, color: low_time ? "var(--error-soft)" : "var(--ink)", fontVariantNumeric: "tabular-nums" }, "aria-live": "polite" },
-          React.createElement(Icon, { name: "clock", size: 16 }),
-          formatTime(timeRemainingSec)
+          "div",
+          { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 } },
+          React.createElement("div", { className: "ui-font", style: { fontWeight: 700, color: "var(--quill-brown-deep)" } }, section.title),
+          React.createElement(
+            "div",
+            { className: "ui-font", style: { display: "flex", alignItems: "center", gap: 16 } },
+            React.createElement(
+              "span",
+              { style: { display: "flex", alignItems: "center", gap: 6, fontWeight: 700, color: low_time ? "var(--error-soft)" : "var(--ink)", fontVariantNumeric: "tabular-nums" }, "aria-live": "polite" },
+              React.createElement(Icon, { name: "clock", size: 16 }),
+              formatTime(timeRemainingSec)
+            ),
+            React.createElement(SaveIndicator, { lastSavedAt, onSaveNow, saving })
+          )
         ),
-        React.createElement(SaveIndicator, { lastSavedAt, onSaveNow, saving })
-      )
-    ),
-    React.createElement("div", { className: "no-print", style: { marginBottom: 16 } }, React.createElement(ProgressBar, { pct, color: "var(--quill-brown)" })),
-    React.createElement(
-      "p",
-      { className: "ui-font no-print", style: { fontSize: 13, color: "var(--ink-soft)", marginBottom: 18 } },
-      `Question ${questionIndexInSection + 1} of ${totalInSection}`
-    ),
-    React.createElement(PassagePanel, { passage }),
-    React.createElement(
-      "div",
-      { className: "card fade-in", style: { padding: "24px 26px" } },
-      React.createElement(
-        "div",
-        { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 18 } },
-        React.createElement("h3", { style: { fontSize: 18, lineHeight: 1.5, whiteSpace: "pre-wrap", color: "var(--ink)" } }, renderStemWithNegationHighlight(question.stem)),
-        React.createElement(IconButton, { name: "flag", label: flagged ? "Unflag this question" : "Flag this question to revisit later", onClick: onFlag, active: flagged })
-      ),
-      React.createElement(
-        "div",
-        { style: { display: "grid", gap: 10 } },
-        displayChoices.map((c, i) =>
-          React.createElement(ChoiceButton, {
-            key: c.origIdx,
-            text: c.text,
-            letter: letters[i],
-            selected: chosenShuffledIndex === i,
-            onClick: () => onChoose(i, c.origIdx),
-          })
+        React.createElement(ProgressBar, { pct, color: "var(--quill-brown)" }),
+        React.createElement(
+          "p",
+          { className: "ui-font", style: { fontSize: 13, color: "var(--ink-soft)", margin: "8px 0 0" } },
+          `Question ${questionIndexInSection + 1} of ${totalInSection}`
         )
       )
     ),
     React.createElement(
       "div",
-      { className: "no-print", style: { display: "flex", justifyContent: "space-between", marginTop: 20 } },
-      React.createElement("button", { className: "btn-secondary", onClick: onPrev, disabled: questionIndexInSection === 0 }, "Back"),
+      { style: { maxWidth: 820, margin: "0 auto", padding: "18px 20px 0" } },
+      React.createElement(PassagePanel, { passage }),
       React.createElement(
         "div",
-        { style: { display: "flex", gap: 10 } },
-        questionIndexInSection !== totalInSection - 1 &&
-          React.createElement("button", { className: "btn-secondary", onClick: onFinishSectionEarly }, "Finish section early"),
+        { className: "card fade-in", style: { padding: "24px 26px" } },
         React.createElement(
-          "button",
-          { className: "btn-primary", onClick: onNext, disabled: chosenShuffledIndex === null },
-          questionIndexInSection === totalInSection - 1 ? "Finish section" : "Next"
+          "div",
+          { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 18 } },
+          React.createElement("h3", { style: { fontSize: 18, lineHeight: 1.5, whiteSpace: "pre-wrap", color: "var(--ink)" } }, renderStemWithNegationHighlight(question.stem)),
+          React.createElement(IconButton, { name: "flag", label: flagged ? "Unflag this question" : "Flag this question to revisit later", onClick: onFlag, active: flagged })
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "grid", gap: 10 } },
+          displayChoices.map((c, i) =>
+            React.createElement(ChoiceButton, {
+              key: c.origIdx,
+              text: c.text,
+              letter: letters[i],
+              selected: chosenShuffledIndex === i,
+              onClick: () => onChoose(i, c.origIdx),
+            })
+          )
+        )
+      )
+    ),
+    React.createElement(
+      "div",
+      {
+        className: "no-print",
+        style: {
+          position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 25,
+          background: "var(--parchment)", borderTop: "1px solid var(--border-soft)",
+          boxShadow: "0 -4px 14px var(--shadow-color)", padding: "14px 20px",
+        },
+      },
+      React.createElement(
+        "div",
+        { style: { maxWidth: 820, margin: "0 auto", display: "flex", justifyContent: "space-between" } },
+        React.createElement("button", { className: "btn-secondary", onClick: onPrev, disabled: questionIndexInSection === 0 }, "Back"),
+        React.createElement(
+          "div",
+          { style: { display: "flex", gap: 10 } },
+          questionIndexInSection !== totalInSection - 1 &&
+            React.createElement("button", { className: "btn-secondary", onClick: onFinishSectionEarly }, "Finish section early"),
+          React.createElement(
+            "button",
+            { className: "btn-primary", onClick: onNext, disabled: chosenShuffledIndex === null },
+            questionIndexInSection === totalInSection - 1 ? "Finish section" : "Next"
+          )
         )
       )
     )
@@ -6419,6 +6500,19 @@ function App() {
     });
   }, [persist]);
 
+  // ---- save when tab is hidden or the page is about to unload (extra safety net beyond per-answer autosave) ----
+  useEffect(() => {
+    const handler = () => {
+      if (document.visibilityState === "hidden") persist(stateRef.current);
+    };
+    document.addEventListener("visibilitychange", handler);
+    window.addEventListener("pagehide", handler);
+    return () => {
+      document.removeEventListener("visibilitychange", handler);
+      window.removeEventListener("pagehide", handler);
+    };
+  }, [persist]);
+
   // ---- 15-minute save reminder (skips during final minute of a section) ----
   useEffect(() => {
     if (view !== "in_section") return;
@@ -6651,7 +6745,7 @@ function App() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(React.createElement(App));
+root.render(React.createElement(ErrorBoundary, null, React.createElement(App)));
 
 </script>
 </body>
