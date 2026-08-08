@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Saarah's Iowa ELA &amp; Language Practice Exam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -70,6 +70,8 @@
     min-height: 44px;
     min-width: 44px;
     font-size: 15px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   button:focus-visible, [tabindex]:focus-visible, a:focus-visible {
     outline: 3px solid var(--focus-ring);
@@ -5635,23 +5637,59 @@ const EXAM_TITLE = "Iowa ELA & Language Practice Exam";
 const EXAM_FORM_LABEL = "Form G \u2014 Reading, Written Expression, Vocabulary & Language";
 const SAVE_REMINDER_INTERVAL_MS = 15 * 60 * 1000;
 
-// ---------- Storage helpers (window.storage may fail in private/blocked contexts) ----------
-async function loadState() {
+// ---------- Storage helpers ----------
+// window.storage is a Claude-artifact-only API: it only exists when this file is
+// rendered inside Claude's own artifact viewer. If Saarah opens this file directly
+// in Safari (downloaded, shared via Files, AirDropped, etc.) window.storage won't
+// exist at all, and saves would silently do nothing. So: try window.storage first
+// when it's present, but always also mirror to the browser's own localStorage,
+// which works in any real browser including plain Safari on iPad. On load, prefer
+// window.storage's copy when both exist, since it's the more durable cross-device
+// store, but fall back to localStorage automatically.
+function hasClaudeStorage() {
+  return typeof window !== "undefined" && !!window.storage && typeof window.storage.get === "function";
+}
+function readLocalStorage() {
   try {
-    const res = await window.storage.get(STORAGE_KEY, false);
-    if (res && res.value) return JSON.parse(res.value);
-    return null;
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
   } catch (e) {
     return null;
   }
 }
-async function saveState(state) {
+function writeLocalStorage(state) {
   try {
-    const res = await window.storage.set(STORAGE_KEY, JSON.stringify(state), false);
-    return !!res;
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    return true;
   } catch (e) {
     return false;
   }
+}
+async function loadState() {
+  let claudeVal = null;
+  if (hasClaudeStorage()) {
+    try {
+      const res = await window.storage.get(STORAGE_KEY, false);
+      if (res && res.value) claudeVal = JSON.parse(res.value);
+    } catch (e) {
+      claudeVal = null;
+    }
+  }
+  if (claudeVal) return claudeVal;
+  return readLocalStorage();
+}
+async function saveState(state) {
+  let savedViaClaude = false;
+  if (hasClaudeStorage()) {
+    try {
+      const res = await window.storage.set(STORAGE_KEY, JSON.stringify(state), false);
+      savedViaClaude = !!res;
+    } catch (e) {
+      savedViaClaude = false;
+    }
+  }
+  const savedViaLocal = writeLocalStorage(state);
+  return savedViaClaude || savedViaLocal;
 }
 
 // ---------- Deterministic seeded shuffle (stable across reloads for a given question id) ----------
@@ -6084,13 +6122,56 @@ function ChoiceButton({ text, selected, onClick, letter }) {
   );
 }
 
-function QuestionScreen({ section, question, questionIndexInSection, totalInSection, chosenShuffledIndex, onChoose, onNext, onPrev, onFlag, flagged, timeRemainingSec, onSaveNow, saving, lastSavedAt, storageWarning, onFinishSectionEarly }) {
+// SectionTimer ticks entirely on its own local state, once per second. It does
+// NOT touch the parent app's state on every tick -- it only calls onTick (a cheap
+// ref update, no re-render) each second, and onExpire once when time runs out.
+// This means the heavy stuff around it (passage text, answer choices) never has
+// to re-render just because the clock moved -- which is what makes the whole
+// screen stay responsive to taps for the full length of a section.
+function SectionTimer({ sectionId, initialSeconds, onTick, onExpire }) {
+  const [displaySeconds, setDisplaySeconds] = useState(initialSeconds);
+  const secondsRef = useRef(initialSeconds);
+  const expiredRef = useRef(false);
+  const onTickRef = useRef(onTick);
+  const onExpireRef = useRef(onExpire);
+  onTickRef.current = onTick;
+  onExpireRef.current = onExpire;
+
+  useEffect(() => {
+    secondsRef.current = initialSeconds;
+    expiredRef.current = false;
+    setDisplaySeconds(initialSeconds);
+    const interval = setInterval(() => {
+      if (expiredRef.current) return;
+      const next = Math.max(0, secondsRef.current - 1);
+      secondsRef.current = next;
+      setDisplaySeconds(next);
+      onTickRef.current(sectionId, next);
+      if (next <= 0 && !expiredRef.current) {
+        expiredRef.current = true;
+        onExpireRef.current();
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+    // Intentionally only re-run when moving to a NEW section, not on every
+    // parent re-render -- that's what keeps this isolated.
+  }, [sectionId]);
+
+  const low = displaySeconds <= 60;
+  return React.createElement(
+    "span",
+    { style: { display: "flex", alignItems: "center", gap: 6, fontWeight: 700, color: low ? "var(--error-soft)" : "var(--ink)", fontVariantNumeric: "tabular-nums" }, "aria-live": "polite" },
+    React.createElement(Icon, { name: "clock", size: 16 }),
+    formatTime(displaySeconds)
+  );
+}
+
+function QuestionScreen({ section, question, questionIndexInSection, totalInSection, chosenShuffledIndex, onChoose, onNext, onPrev, onFlag, flagged, initialTimeRemainingSec, onTimerTick, onTimerExpire, onSaveNow, saving, lastSavedAt, storageWarning, onFinishSectionEarly }) {
   const passage = question.passageId ? section.passages[question.passageId] : null;
   const shuffleOrder = useMemo(() => seededShuffleIndices(question.choices.length, question.id), [question.id]);
   const displayChoices = shuffleOrder.map((origIdx) => ({ ...question.choices[origIdx], origIdx }));
   const letters = ["A", "B", "C", "D", "E"];
   const pct = ((questionIndexInSection) / totalInSection) * 100;
-  const low_time = timeRemainingSec <= 60;
 
   return React.createElement(
     "div",
@@ -6115,12 +6196,7 @@ function QuestionScreen({ section, question, questionIndexInSection, totalInSect
           React.createElement(
             "div",
             { className: "ui-font", style: { display: "flex", alignItems: "center", gap: 16 } },
-            React.createElement(
-              "span",
-              { style: { display: "flex", alignItems: "center", gap: 6, fontWeight: 700, color: low_time ? "var(--error-soft)" : "var(--ink)", fontVariantNumeric: "tabular-nums" }, "aria-live": "polite" },
-              React.createElement(Icon, { name: "clock", size: 16 }),
-              formatTime(timeRemainingSec)
-            ),
+            React.createElement(SectionTimer, { sectionId: section.id, initialSeconds: initialTimeRemainingSec, onTick: onTimerTick, onExpire: onTimerExpire }),
             React.createElement(SaveIndicator, { lastSavedAt, onSaveNow, saving })
           )
         ),
@@ -6135,6 +6211,7 @@ function QuestionScreen({ section, question, questionIndexInSection, totalInSect
     React.createElement(
       "div",
       { style: { maxWidth: 820, margin: "0 auto", padding: "18px 20px 0" } },
+      storageWarning && React.createElement(StorageWarningBanner),
       React.createElement(PassagePanel, { passage }),
       React.createElement(
         "div",
@@ -6167,7 +6244,8 @@ function QuestionScreen({ section, question, questionIndexInSection, totalInSect
         style: {
           position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 25,
           background: "var(--parchment)", borderTop: "1px solid var(--border-soft)",
-          boxShadow: "0 -4px 14px var(--shadow-color)", padding: "14px 20px",
+          boxShadow: "0 -4px 14px var(--shadow-color)",
+          padding: "14px 20px calc(14px + env(safe-area-inset-bottom, 0px))",
         },
       },
       React.createElement(
@@ -6466,6 +6544,19 @@ function App() {
   const [view, setView] = useState("home"); // home | section_intro | in_section | section_complete | results
   const stateRef = useRef(state);
   stateRef.current = state;
+  // Always-fresh, per-section seconds-remaining, updated every tick by the isolated
+  // SectionTimer component WITHOUT triggering a re-render of the whole app. This is
+  // what makes the countdown cheap: only a tiny clock component re-renders every
+  // second, not the passage text or the answer buttons.
+  const timerRef = useRef({});
+
+  const withLatestTimer = useCallback((s) => {
+    if (!s.inProgress) return s;
+    return {
+      ...s,
+      inProgress: { ...s.inProgress, sectionTimeRemainingSec: { ...s.inProgress.sectionTimeRemainingSec, ...timerRef.current } },
+    };
+  }, []);
 
   // ---- initial load ----
   useEffect(() => {
@@ -6484,26 +6575,59 @@ function App() {
   }, [state.theme]);
 
   const persist = useCallback(async (nextState) => {
+    const toSave = withLatestTimer(nextState);
     setSaving(true);
-    const ok = await saveState(nextState);
+    const ok = await saveState(toSave);
     setSaving(false);
     setStorageWarning(!ok);
     if (ok) setLastSavedAt(nowIso());
     return ok;
-  }, []);
+  }, [withLatestTimer]);
 
   const updateAndSave = useCallback((updater) => {
     setState((prev) => {
-      const next = typeof updater === "function" ? updater(prev) : updater;
+      const merged = withLatestTimer(prev);
+      const next = typeof updater === "function" ? updater(merged) : updater;
       persist(next);
       return next;
     });
-  }, [persist]);
+  }, [persist, withLatestTimer]);
+
+  // safeHandler: any interaction handler that throws should never leave the app
+  // stuck with no working buttons. It logs, shows a small recoverable warning, and
+  // lets the person keep interacting rather than silently eating the click.
+  const safeHandler = useCallback((fn) => {
+    return (...args) => {
+      try {
+        return fn(...args);
+      } catch (err) {
+        console.error("Action failed:", err);
+        setStorageWarning(true);
+        setTimeout(() => setStorageWarning(false), 4000);
+      }
+    };
+  }, []);
+
+  // Guards against a double-tap (common on a slightly laggy screen) firing a
+  // navigation action twice and skipping a question. Only one navigation action
+  // is allowed through per short window, app-wide.
+  const navLockRef = useRef(false);
+  const withNavLock = useCallback((fn) => {
+    return (...args) => {
+      if (navLockRef.current) return;
+      navLockRef.current = true;
+      try {
+        fn(...args);
+      } finally {
+        setTimeout(() => { navLockRef.current = false; }, 300);
+      }
+    };
+  }, []);
 
   // ---- save when tab is hidden or the page is about to unload (extra safety net beyond per-answer autosave) ----
   useEffect(() => {
     const handler = () => {
-      if (document.visibilityState === "hidden") persist(stateRef.current);
+      if (document.visibilityState === "hidden") persist(withLatestTimer(stateRef.current));
     };
     document.addEventListener("visibilitychange", handler);
     window.addEventListener("pagehide", handler);
@@ -6511,7 +6635,7 @@ function App() {
       document.removeEventListener("visibilitychange", handler);
       window.removeEventListener("pagehide", handler);
     };
-  }, [persist]);
+  }, [persist, withLatestTimer]);
 
   // ---- 15-minute save reminder (skips during final minute of a section) ----
   useEffect(() => {
@@ -6519,36 +6643,11 @@ function App() {
     const t = setInterval(() => {
       const s = stateRef.current;
       const sec = SECTIONS[s.inProgress ? s.inProgress.currentSectionIndex : 0];
-      const remaining = s.inProgress ? s.inProgress.sectionTimeRemainingSec[sec.id] : 999;
+      const remaining = timerRef.current[sec.id] ?? (s.inProgress ? s.inProgress.sectionTimeRemainingSec[sec.id] : 999);
       if (remaining > 60) setShowReminder(true);
     }, SAVE_REMINDER_INTERVAL_MS);
     return () => clearInterval(t);
   }, [view]);
-
-  // ---- section countdown timer ----
-  useEffect(() => {
-    if (view !== "in_section") return;
-    const timer = setInterval(() => {
-      setState((prev) => {
-        if (!prev.inProgress) return prev;
-        const sec = SECTIONS[prev.inProgress.currentSectionIndex];
-        const remaining = prev.inProgress.sectionTimeRemainingSec[sec.id];
-        if (remaining <= 0) return prev; // handled by effect below
-        const nextRemaining = { ...prev.inProgress.sectionTimeRemainingSec, [sec.id]: remaining - 1 };
-        return { ...prev, inProgress: { ...prev.inProgress, sectionTimeRemainingSec: nextRemaining } };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [view]);
-
-  // ---- watch for time running out -> auto finish section ----
-  useEffect(() => {
-    if (view !== "in_section" || !state.inProgress) return;
-    const sec = SECTIONS[state.inProgress.currentSectionIndex];
-    if (state.inProgress.sectionTimeRemainingSec[sec.id] <= 0) {
-      finishSection();
-    }
-  }, [state.inProgress && state.inProgress.sectionTimeRemainingSec[SECTIONS[state.inProgress.currentSectionIndex].id], view]);
 
   // ================= Handlers =================
   const handleStart = () => {
@@ -6576,6 +6675,7 @@ function App() {
 
   const beginSection = () => {
     const sec = SECTIONS[state.inProgress.currentSectionIndex];
+    timerRef.current[sec.id] = state.inProgress.sectionTimeRemainingSec[sec.id];
     updateAndSave((prev) => ({
       ...prev,
       inProgress: { ...prev.inProgress, sectionStatus: { ...prev.inProgress.sectionStatus, [sec.id]: "active" }, currentQuestionIndex: 0 },
@@ -6626,6 +6726,17 @@ function App() {
     setView("section_complete");
   };
 
+  // Called by the isolated SectionTimer every second. This ONLY updates a ref --
+  // it deliberately does not call setState, so the passage text and answer
+  // buttons never re-render just because a second ticked by.
+  const handleTimerTick = useCallback((sectionId, seconds) => {
+    timerRef.current[sectionId] = seconds;
+  }, []);
+
+  const handleTimerExpire = useCallback(() => {
+    finishSection();
+  }, []);
+
   const handleFinishSectionEarlyClick = () => {
     const sec = SECTIONS[stateRef.current.inProgress.currentSectionIndex];
     const answeredCount = sec.questions.filter((q) => stateRef.current.inProgress.answers[q.id]).length;
@@ -6643,6 +6754,8 @@ function App() {
       updateAndSave((prev) => ({ ...prev, lastResult: { ...results, completedAt: nowIso(), predictedScorePct: prev.predictedScorePct }, inProgress: { ...prev.inProgress, finishedAt: nowIso() } }));
       setView("results");
     } else {
+      const nextSec = SECTIONS[state.inProgress.currentSectionIndex + 1];
+      timerRef.current[nextSec.id] = state.inProgress.sectionTimeRemainingSec[nextSec.id];
       updateAndSave((prev) => ({ ...prev, inProgress: { ...prev.inProgress, currentSectionIndex: prev.inProgress.currentSectionIndex + 1, currentQuestionIndex: 0 } }));
       setView("section_intro");
     }
@@ -6699,7 +6812,7 @@ function App() {
   const currentSection = SECTIONS[state.inProgress.currentSectionIndex];
 
   if (view === "section_intro") {
-    return React.createElement(SectionIntroScreen, { section: currentSection, isFirst: state.inProgress.currentSectionIndex === 0, onBegin: beginSection });
+    return React.createElement(SectionIntroScreen, { section: currentSection, isFirst: state.inProgress.currentSectionIndex === 0, onBegin: safeHandler(withNavLock(beginSection)) });
   }
 
   if (view === "section_complete") {
@@ -6707,7 +6820,7 @@ function App() {
     return React.createElement(SectionCompleteScreen, {
       section: currentSection, answeredCount, totalCount: currentSection.questions.length,
       isLastSection: state.inProgress.currentSectionIndex === SECTIONS.length - 1,
-      onContinue: continueAfterSection,
+      onContinue: safeHandler(withNavLock(continueAfterSection)),
     });
   }
 
@@ -6728,17 +6841,19 @@ function App() {
       questionIndexInSection: qIdx,
       totalInSection: currentSection.questions.length,
       chosenShuffledIndex,
-      onChoose: chooseAnswer,
-      onNext: goNext,
-      onPrev: goPrev,
-      onFlag: toggleFlag,
+      onChoose: safeHandler(chooseAnswer),
+      onNext: safeHandler(withNavLock(goNext)),
+      onPrev: safeHandler(withNavLock(goPrev)),
+      onFlag: safeHandler(toggleFlag),
       flagged: !!state.inProgress.flags[question.id],
-      timeRemainingSec: state.inProgress.sectionTimeRemainingSec[currentSection.id],
+      initialTimeRemainingSec: state.inProgress.sectionTimeRemainingSec[currentSection.id],
+      onTimerTick: handleTimerTick,
+      onTimerExpire: safeHandler(handleTimerExpire),
       onSaveNow: handleSaveNow,
       saving,
       lastSavedAt,
       storageWarning,
-      onFinishSectionEarly: handleFinishSectionEarlyClick,
+      onFinishSectionEarly: safeHandler(withNavLock(handleFinishSectionEarlyClick)),
     })
   );
   } // end renderView
